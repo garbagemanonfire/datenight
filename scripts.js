@@ -1,13 +1,33 @@
 $(function () {
 
-	$('.link').hide();
-	$('.map').hide();
+	$('#closestRest').hide();
+	$('#bestRest').hide();
+	$('#closestBar').hide();
+	$('#bestBar').hide();
+	$('.mapOne').hide();
+	$('.mapTwo').hide();
 	
-	$('.icon').click(function () {
-		$('.link').slideToggle();
+	$('#restaurantIcon').click(function () {
+		$('#closestRest').slideToggle();
+		$('#bestRest').slideToggle();
 	})
 
-	$('.link').click(function () {
-		$('.map').slideToggle();
+	$('#closestRest').click(function() {
+		$('.mapOne').slideToggle();
+	})
+	$('#bestRest').click(function() {
+		$('.mapOne').slideToggle();
+	})
+
+	$('#barIcon').click(function () {
+		$('#closestBar').slideToggle();
+		$('#bestBar').slideToggle();
+	})
+
+	$('#closestBar').click(function() {
+		$('.mapTwo').slideToggle();
+	})
+	$('#bestBar').click(function () {
+		$('.mapTwo').slideToggle();
 	})
 })
