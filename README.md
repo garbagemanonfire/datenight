@@ -1,3 +1,1 @@
-A tool that might be helpful for our project.
-
-http://yeoman.io/
+DateNite APP: Backbone app, using Node, Bootstrap, Yelp API, Google maps api, and twitter apI.
