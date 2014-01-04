@@ -13,9 +13,9 @@ app.models = {};
 var Term = "food"
 var Location = "portland"
 
-var url = "http://localhost:7357/?term=" + Term + "&location=" + Location;
+var url = "http://localhost:7357/?term=" + Term + "&location=" + Location + "&callback=showData";
 
-app.models.dateNite = new DateNiteModel({currently: {}});
+app.models.dateNite = new DateNiteModel({region: {}});
 
 app.views.date = new DateView({model: app.models.dateNite});
 app.views.map = new MapView({model: app.models.dateNite});
@@ -23,7 +23,11 @@ app.views.twitter = new TwitterView({model: app.models.dateNite});
 
 window.app = app;
 
-$.getJSON(url, null, function(dateNiteData) {
+$.ajaxSetup({
+    contentType: "application/jsonp; charset=utf-8"
+});
+
+$.getJSON(url, function(dateNiteData) {
   app.models.dateNite.set(dateNiteData);
 });
 

@@ -19,5 +19,6 @@ http.createServer(function (req, resp) {
  
 console.log("Server Listening on 7357");
 
+//Resource interpreted as Script but transferred with MIME type text/plain
 
-// you can query items by using a statment like: http://localhost:7357/?term:food&location=Portland
+// you can query items by using a statment like: http://localhost:7357/?term=food&location=Portland
