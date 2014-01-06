@@ -48,3 +48,58 @@ thead {
 .mapTwo {
   text-align: center;
 }
+
+/*From Yelp Ex*/
+/*html, body {width: 100%; height: 100%; font-family: arial;}  
+body {margin:0;padding 0;overflow: hidden;}*/
+
+#mapContainer {
+  padding-top: 50px;
+}
+
+#map, #mapContainer {
+  width:100%; height: 100%;
+}
+/*#top {
+  position:absolute; 
+  top:0; 
+  left:0; 
+  width: 100%; 
+  height: 50px; 
+  line-height: 50px;
+}*/
+
+#spinner { 
+  visibility: hidden; 
+  margin-left:3px;
+}
+
+/*#poweredby, #searchbox {
+  line-height: 50px;
+}*/
+
+/*#searchbox {
+  text-align: center;
+}*/
+
+#poweredby { 
+  float: right; 
+  margin-right: 3px;
+}
+
+#poweredby img { 
+  vertical-align: baseline;
+}
+
+.marker {
+  font-size: 11px;
+}
+
+.marker .businessimage { 
+  float: left;
+}
+.marker .ratingsimage {
+  vertical-align:middle; 
+  margin-top:0px;
+}
+.marker .businessinfo { margin-left: 110px;}

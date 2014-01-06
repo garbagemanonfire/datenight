@@ -1,2 +1,13 @@
-<h3>Google Map Tab</h3>
-
+<body onload="load()" onunload="GUnload()">
+    <div id="top">
+        <!-- <div id="poweredby">Powered by <a href="http://www.yelp.com"><img src="http://static.px.yelp.com/i/map/miniMapLogo.png" border="0" /></a></div> --> 
+        <div id="searchbox">
+            <form>
+                Search for <input type="text" id="term" name="term" value="sushi"/> <input type="button" value="Search" onclick="return updateMap();"/>
+                <img id="spinner" src="images/spinner.gif" />
+                <span class="error" id="errorMessage" />
+            </form>
+        </div>
+    </div>
+    <div id="mapContainer"><div id="map"></div></div>
+</body>
