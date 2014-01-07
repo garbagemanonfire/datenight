@@ -1,5 +1,5 @@
 var DateView = Backbone.View.extend({
-  el: '#current', // every Backbone view has an associated DOM element
+  el: '#current',
 
   template: require('../../templates/date.hbs'),
 
@@ -10,11 +10,10 @@ var DateView = Backbone.View.extend({
 
   render: function () {
     var context = {}
-    context.currently = this.model.get('currently') || {};
-    context.today = this.model.get('daily') || {};
+    context.businesses = this.model.get('businesses') || {};
     this.$el.html(this.template(context));
     return this;
-  }
+  },
 
 });
 

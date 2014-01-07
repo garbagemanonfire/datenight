@@ -1,16 +1,6 @@
-<h3>Yelp Data</h3>
-</br>
-<table class="table table-striped">
-    <thead>
-        <tr><th>Bussinesses</th><th>Data</th><th>Address</th></tr>
-    </thead>
-    <tbody>
-{{#each businesses}}
-    <tr>
-        <td><b>{{name}}:</b></td>
-        <td>{{rating}}</td>
-        <td>{{location.address}}</td>
-    </tr>
-{{/each}} 
-    </tbody>
-</table>
+<div id="panel">
+      <input id="address" type="text" class="form-control col-lg-8" value="Portland, OR">
+      <input type="button" value="Geocode" class="geocode btn btn-success">
+</div>
+
+<div id="map-canvas"></div>

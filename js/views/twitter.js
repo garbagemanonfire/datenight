@@ -11,7 +11,6 @@ var TwitterView = Backbone.View.extend({
   render: function () {
     var context = {}
     context.currently = this.model.get('currently') || {};
-    context.today = this.model.get('daily') || {};
     this.$el.html(this.template(context));
     return this;
   }
