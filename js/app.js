@@ -62,7 +62,7 @@ var parameterMap = OAuth.getParameterMap(message.parameters);
 parameterMap.oauth_signature = OAuth.percentEncode(parameterMap.oauth_signature)
 console.log(parameterMap);
 
-app.yelpdata = {};
+app.models.dateNite = new DateNiteModel({yelpdata: {}});
 
 $.ajax({
   'url': message.action,
@@ -74,11 +74,9 @@ $.ajax({
     console.log(data);
     // var output = prettyPrint(data);
     // $("body").append(output);
-    app.yelpdata.set = data;
+    app.models.dateNite.set(data);
   }
 });
-
-app.models.dateNite = new DateNiteModel({region: {}});
 
 app.views.date = new DateView({model: app.models.dateNite});
 app.views.map = new MapView({model: app.models.dateNite});
