@@ -1,6 +1,6 @@
 var TwitterView = Backbone.View.extend({
-  el: '#twitter', // every Backbone view has an associated DOM element
-
+  el: '#twitter',
+  
   template: require('../../templates/twitter.hbs'),
 
   initialize: function () {

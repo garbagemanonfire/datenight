@@ -1,5 +1,5 @@
 var MapView = Backbone.View.extend({
-  el: '#map', // every Backbone view has an associated DOM element
+  el: '#map', 
 
   template: require('../../templates/map.hbs'),
 
@@ -8,13 +8,13 @@ var MapView = Backbone.View.extend({
     this.render();
   },
 
+// Render the view with a default map location.
   render: function () {
     google.maps.event.addDomListener(window, 'onload', this.initialize);
     var context = {}
     context.businesses = this.model.get('businesses') || {};
     this.$el.html(this.template(context));
-    geocoder = new google.maps.Geocoder();
-    var latlng = new google.maps.LatLng(45.5200, 122.6819);
+    var latlng = new google.maps.LatLng(45.5200, -122.6819);
     var mapOptions = {
       zoom: 12,
       center: latlng
@@ -23,12 +23,14 @@ var MapView = Backbone.View.extend({
     return this;
   },
 
+// On buttong click call codeAddress
   events: {
     "click .geocode": "codeAddress",
   },
 
+// Transform the address to a location using Google's API
   codeAddress: function() {
-    console.log("Button Clicked");
+    // console.log("Button Clicked");
     var address = document.getElementById('address').value;
     geocoder.geocode( { 'address': address}, function(results, status) {
       if (status == google.maps.GeocoderStatus.OK) {

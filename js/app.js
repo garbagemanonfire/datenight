@@ -67,9 +67,6 @@ app.views.date = new DateView({model: app.models.dateNite});
 app.views.map = new MapView({model: app.models.dateNite});
 app.views.twitter = new TwitterView({model: app.models.dateNite});
 
-var geocoder;
-var map;
-
 window.app = app;
 
 });
