@@ -6,13 +6,6 @@ var MapView = Backbone.View.extend({
   initialize: function () {
     this.listenTo(this.model, 'change', this.render);
     this.render();
-    geocoder = new google.maps.Geocoder();
-    var latlng = new google.maps.LatLng(45.5200, 122.6819);
-    var mapOptions = {
-      zoom: 12,
-      center: latlng
-    }
-    map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
   },
 
   render: function () {
@@ -20,6 +13,13 @@ var MapView = Backbone.View.extend({
     var context = {}
     context.businesses = this.model.get('businesses') || {};
     this.$el.html(this.template(context));
+    geocoder = new google.maps.Geocoder();
+    var latlng = new google.maps.LatLng(45.5200, 122.6819);
+    var mapOptions = {
+      zoom: 12,
+      center: latlng
+    }
+    map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
     return this;
   },
 
