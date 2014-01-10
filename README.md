@@ -7,7 +7,8 @@ DateNight
 ** Google maps api, 
 ** and twitter apI.
 
-beefy js/app.js:bundle.js --live
+Ver .01 
+-static site sketches
 
 Ver .02 
 -Backbone
@@ -15,9 +16,6 @@ Ver .02
 -Attempted to connect Yelp Api but to no avail.
 -Reformatted the look and feel
 
-Ver .03
--Connected Yelp API 
-
-Ver .04 
--Attempted to connect google maps goecode api.
+Ver. 03
+-Connected google maps goecode api.
 
