@@ -4,7 +4,7 @@ body {
 }
 
 #map-canvas { 
-  height: 400px;
+  height: 200px;
   width: 375px;
   margin: 0px;
   padding: 0px;
@@ -14,34 +14,32 @@ body {
   width: 400px;
 }
 
-.icon {
+.food {
+  float: left;
+  width: 49%;
   text-align: center;
   border-color: #2C3E50;
   border-style: solid;
   border-width: 5%;
-    margin: 10%;
+    margin: 5%;
+}
+
+.beer {
+  float: right;
+  width: 49%;
+  text-align: center;
+  border-color: #2C3E50;
+  border-style: solid;
+  border-width: 5%;
+    margin: 5%;
 }
 
 #restaurantIcon {
-  width: 50px;
+  width: 50%px;
   height: 50px;
 }
 
 #barIcon {
-  width: 50px;
+  width: 50%px;
   height: 50px;
 }
-
-/*.link {
-  font-family: helvetica;
-  text-align: center;
-}*/
-
-/*thead {
-  font-size: 1.17em;
-}*/
-
-/*#mapContainer {
-  padding-top: 50px;
-}
-*/

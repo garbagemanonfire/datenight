@@ -22,6 +22,10 @@ var auth = {
 
 var terms = 'food';
 var near = 'portland';
+var limit = 2
+var radius_filter = 805
+
+// console.log(navigator.geolocation.getCurrentPosition(success));
 
 var accessor = {
   consumerSecret: auth.consumerSecret,
@@ -31,6 +35,8 @@ var accessor = {
 parameters = [];
 parameters.push(['term', terms]);
 parameters.push(['location', near]);
+parameters.push(['limit', limit]);
+parameters.push(['radius_filter', radius_filter]);
 parameters.push(['callback', 'cb']);
 parameters.push(['oauth_consumer_key', auth.consumerKey]);
 parameters.push(['oauth_consumer_secret', auth.consumerSecret]);
