@@ -1,5 +1,9 @@
-.icon {
+h1 {
+	font-family: diplomata SC;
 	text-align: center;
+}
+.icon {
+	float: left;
 	border-color: white;
 	border-style: solid;
 	border-width: 5px;
@@ -8,11 +12,13 @@
 #restaurantIcon {
 	width: 100px;
 	height: 100px;
+	margin: 0 0 0 50px;
 }
 
 #barIcon {
 	width: 100px;
 	height: 100px;
+	margin: 0 0 0 50px;
 }
 
 .link {
@@ -24,6 +30,17 @@
 	text-align: center;
 }
 
-.mapTwo {
+.twitter-share-button {
 	text-align: center;
+	margin: 0 0 0 150px;
+}
+
+form {
+	text-align: center;
+}
+
+body {
+	width: 400px;
+	height: 600px;
+	background-color: white;
 }

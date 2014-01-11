@@ -1,13 +1,12 @@
 $(function () {
 
-	$('#closestRest').hide();
+	/* $('#closestRest').hide();
 	$('#bestRest').hide();
 	$('#closestBar').hide();
-	$('#bestBar').hide();
-	$('.mapOne').hide();
-	$('.mapTwo').hide();
+	$('#bestBar').hide(); */
+	$('.mapOne').show();
 	
-	$('#restaurantIcon').click(function () {
+	/*$('#restaurantIcon').click(function () {
 		$('#closestRest').slideToggle();
 		$('#bestRest').slideToggle();
 	})
