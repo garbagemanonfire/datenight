@@ -12,7 +12,7 @@ var MapView = Backbone.View.extend({
   render: function () {
     google.maps.event.addDomListener(window, 'onload', this.initialize);
     var context = {}
-    context.businesses = this.model.get('businesses') || {};
+    context.businesses = this.model.get('businesses') || null;
     this.$el.html(this.template(context));
     var latlng = new google.maps.LatLng(45.5200, -122.6819);
     var mapOptions = {
@@ -20,11 +20,27 @@ var MapView = Backbone.View.extend({
       center: latlng
     }
     map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+    
+    if(!context.businesses) return this; // STAHP!!!
+
+    console.log(context)
+    var contentString = '<div id="content">'+
+      '<h5 class="firstHeading">'+ context.businesses[0].location.address +'</h5>'+
+      '<p>Address'+
+      '</p>'+
+      '</div>';
+
+    var infowindow = new google.maps.InfoWindow({
+      content: contentString
+    });
+
     var marker = new google.maps.Marker({
       position: latlng,
       map: map,
       title: 'Hello World!'
     });
+    
+    infowindow.open(map,marker);
 
     return this;
   },
@@ -37,9 +53,11 @@ var MapView = Backbone.View.extend({
   yelpDatapass: function(){
     var context = {}
     context.businesses = this.model.get('businesses') || {};
-    var test = context.businesses[0].location.address +" "+ context.businesses[0].location.city ;
-    console.log(test)
+    var test = context.businesses[0].location.address +" "+ context.businesses[0].location.city;
+    var test1 = context.businesses[1].location.address +" "+ context.businesses[1].location.city;
     this.codeAddress(test);
+    console.log(test1)
+    this.codeAddress(test1);
   },
 
 // Transform the address to a location using Google's API
