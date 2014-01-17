@@ -1,14 +1,14 @@
-$(function () {
+// $(function () {
 
-    $('#closestRest').hide();
-    $('#closestBar').hide();
+//     $('#closestRest').hide();
+//     $('#closestBar').hide();
 
-    $('.food').click(function () {
-        $('#closestRest').slideToggle();
-    })
+//     $('.food').click(function () {
+//         $('#closestRest').slideToggle();
+//     })
 
-    $('.drink').click(function () {
-        $('#closestBar').slideToggle();
-    })
+//     $('.drink').click(function () {
+//         $('#closestBar').slideToggle();
+//     })
 
-})
+// })

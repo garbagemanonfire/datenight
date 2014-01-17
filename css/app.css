@@ -14,6 +14,12 @@ body {
   width: 400px;
 }
 
+.well {
+  height: 500px;
+  width: auto;
+
+}
+
 #address {
   float: left;
   width: 66%;
@@ -25,23 +31,27 @@ body {
 }
 
 .food {
+  background-color: #F5AD4E;
   float: left;
   width: 40%;
+  padding: 4px;
   text-align: center;
   border-color: #2C3E50;
   border-style: solid;
   border-width: 1%;
-    margin: 2%;
+    margin: 5%;
 }
 
 .drink {
+  background-color: #F5AD4E;
   float: right;
   width: 40%;
+  padding: 4px;
   text-align: center;
   border-color: #2C3E50;
   border-style: solid;
   border-width: 1%;
-    margin: 2%;
+    margin: 5%;
 }
 
 #restaurantIcon {

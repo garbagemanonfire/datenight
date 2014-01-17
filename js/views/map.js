@@ -11,36 +11,50 @@ var MapView = Backbone.View.extend({
 // Render the view with a default map location.
   render: function () {
     google.maps.event.addDomListener(window, 'onload', this.initialize);
+    
+    var drinkstorage = {}
+    drinkstorage.drink = this.model.get('drink') || null
+    drinkstorage.drinkadd = this.model.get('drinkadd') || null
+
+    var foodstorage = {}
+    foodstorage.food = this.model.get('food') || null
+    foodstorage.foodadd = this.model.get('foodadd') || null
+
     var context = {}
     context.businesses = this.model.get('businesses') || null;
     this.$el.html(this.template(context));
     var latlng = new google.maps.LatLng(45.5200, -122.6819);
     var mapOptions = {
-      zoom: 12,
+      zoom: 13,
       center: latlng
     }
+
     map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
     
     if(!context.businesses) return this; // STAHP!!!
 
-    console.log(context)
-    var contentString = '<div id="content">'+
-      '<h5 class="firstHeading">'+ context.businesses[0].location.address +'</h5>'+
-      '<p>Address'+
-      '</p>'+
-      '</div>';
+    var drinkcontentString = '<div id="content">'+
+      '<p>'+ drinkstorage.drink +'</p>' + '<p>'+ drinkstorage.drinkadd +'</p>'+'</div>';
 
-    var infowindow = new google.maps.InfoWindow({
-      content: contentString
+    var foodcontentString = '<div id="content">'+
+      '<p>'+ foodstorage.food +'</p>' + '<p>'+ foodstorage.foodadd +'</p>'+'</div>';
+
+    var drinkinfowindow = new google.maps.InfoWindow({
+      content: drinkcontentString
+    });
+
+    var foodinfowindow = new google.maps.InfoWindow({
+      content: foodcontentString
     });
 
     var marker = new google.maps.Marker({
       position: latlng,
       map: map,
-      title: 'Hello World!'
+      title: ''
     });
     
-    infowindow.open(map,marker);
+    drinkinfowindow.open(map,marker);
+    foodinfowindow.open(map,marker);
 
     return this;
   },
@@ -51,14 +65,11 @@ var MapView = Backbone.View.extend({
   },
 
   yelpDatapass: function(){
-    var context = {}
-    context.businesses = this.model.get('businesses') || {};
-    var test = context.businesses[0].location.address +" "+ context.businesses[0].location.city;
-    var test1 = context.businesses[1].location.address +" "+ context.businesses[1].location.city;
-    this.codeAddress(test);
-    console.log(test1)
-    this.codeAddress(test1);
+    var drinkstorage = {}
+    drinkstorage.drinkadd = this.model.get('drinkadd') || null
+    this.codeAddress(drinkstorage.drinkadd);
   },
+
 
 // Transform the address to a location using Google's API
   codeAddress: function(x) {
