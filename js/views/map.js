@@ -14,11 +14,11 @@ var MapView = Backbone.View.extend({
   render: function () {
     google.maps.event.addDomListener(window, 'onload', this.initialize);
     
-    var drinkstorage = {}
-    drinkstorage.drink = this.model.get('drink') || null
-    drinkstorage.drinkadd = this.model.get('drinkadd') || null
+    // var drinkstorage = {}
+    // drinkstorage.drink = this.model.get('drink') || null
+    // console.log(drinkstorage.drink)
     
-    this.$el.html(this.template(drinkstorage));
+    this.$el.html(this.template());
 
     // This sets the intial map location on page load
     var latlng = new google.maps.LatLng(45.5200, -122.6819);
@@ -30,7 +30,7 @@ var MapView = Backbone.View.extend({
 
     map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
     
-    if(!drinkstorage.drinkadd) return this; // Stop and reload if data from api has not loaded.
+    // if(!drinkstorage.drink) return this; // Stop and reload if data from api has not loaded.
 
     // return this;
   },
@@ -42,13 +42,29 @@ var MapView = Backbone.View.extend({
 
   yelpDatapass: function(){
     var address = document.getElementById('address').value;
+    searchterm = ''
+    function yelpsearch(searchterm, address){
+        for (var x = 0; x<2; x++) {
+          if (x == 0) {
+            searchterm = 'bar'
+            yelpapi(searchterm, address);
+          } else {
+            searchterm = 'food'
+            yelpapi(searchterm, address);
+          };
+        };
+    };
+    var update = yelpsearch(searchterm, address)
+
     this.codeAddress(address);
   },
 
   // Transform the address to a location using Google's API
-  codeAddress: function(x) {
+
+  codeAddress: function(address) {
     console.log("Button Clicked");
-    var address = x.toString();
+
+    var address = address.toString();
     var geocoder = new google.maps.Geocoder();
 
     geocoder.geocode( { 'address': address}, function(results, status) {
@@ -67,6 +83,10 @@ var MapView = Backbone.View.extend({
     var drinkstorage = {}
     drinkstorage.drink = this.model.get('drink') || null
     drinkstorage.drinkadd = this.model.get('drinkadd') || null
+
+    console.log("Before the empty data test call");
+    if(!drinkstorage.drinkadd) return this;
+    console.log("After the empty data test call");
 
     var foodstorage = {}
     foodstorage.food = this.model.get('food') || null

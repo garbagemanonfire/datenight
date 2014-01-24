@@ -1,5 +1,3 @@
-// var app = require('./app');
-
 var auth = { 
   consumerKey: "sOpnEMjxxOJT9o2-TuczeQ",
   consumerSecret: "URVFfpTxXkfx55Jt74IuvKmGz2k",
@@ -10,15 +8,13 @@ var auth = {
   }
 };
 
-var near = 'Portland, OR';
-
-module.exports = exports = function(searchterm){ 
+module.exports = exports = function(searchterm, address){ 
 
   var limit = 1;
-  var radius_filter = 900;
+  var radius_filter = 500;
   var sort = 2;
   var term = searchterm;
-  console.log(term)
+  var near = address;
 
   parameters = [];
   parameters.push(['term', term]);
@@ -67,11 +63,9 @@ module.exports = exports = function(searchterm){
         var name = data.businesses[0].name;
         var address = data.businesses[0].location.address +", "+ data.businesses[0].location.city +", "+ data.businesses[0].location.state_code;
         app.models.dateNite.set({ drink: name, drinkadd: address });
+        console.log(data)
         console.log(data.businesses[0].name);
       };
     }
   });
 }
-
-
-// console.log(app.searchTerm)

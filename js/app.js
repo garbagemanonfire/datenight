@@ -6,17 +6,23 @@ var TwitterView = require('./views/twitter');
 
 var yelpapi = require('./yelpapi');
 
-var searchterm = ''
 
-for (var x = 0; x<2; x++) {
-  if (x == 0) {
-    searchterm = 'bar'
-    yelpapi('bar');
-  } else {
-    searchterm = 'food'
-    yelpapi('food');
-  };
-};
+var searchterm = '';
+var address = '';
+
+// function yelpsearch(searchterm, address){
+//   for (var x = 0; x<2; x++) {
+//     if (x == 0) {
+//       var searchterm = 'bar'
+//       yelpapi(searchterm, address);
+//     } else {
+//       var searchterm = 'food'
+//       yelpapi(searchterm, address);
+//     };
+//   };
+// };
+
+// var init = yelpsearch(searchterm, address);
 
 var DateNiteModel = require('./models/datenite');
 
