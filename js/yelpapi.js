@@ -60,12 +60,12 @@ module.exports = exports = function(searchterm){
         app.models.dateNite.set(data);
         console.log(data);
         var name = data.businesses[0].name;
-        var address = data.businesses[0].location.address +" "+ data.businesses[0].location.city;
+        var address = data.businesses[0].location.address +","+ data.businesses[0].location.city +","+ data.businesses[0].location.state_code;
         app.models.dateNite.set({ food: name, foodadd: address });
         console.log(data.businesses[0].name);
       } else {
         var name = data.businesses[0].name;
-        var address = data.businesses[0].location.address +" "+ data.businesses[0].location.city;
+        var address = data.businesses[0].location.address +", "+ data.businesses[0].location.city +", "+ data.businesses[0].location.state_code;
         app.models.dateNite.set({ drink: name, drinkadd: address });
         console.log(data.businesses[0].name);
       };
