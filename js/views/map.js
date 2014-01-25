@@ -7,6 +7,7 @@ var MapView = Backbone.View.extend({
 
   initialize: function () {
     this.listenTo(this.model, 'change', this.render);
+    // this.model.fetch();
     this.render();
   },
 
@@ -14,11 +15,11 @@ var MapView = Backbone.View.extend({
   render: function () {
     google.maps.event.addDomListener(window, 'onload', this.initialize);
     
-    // var drinkstorage = {}
-    // drinkstorage.drink = this.model.get('drink') || null
-    // console.log(drinkstorage.drink)
+    var drinkstorage = {}
+    drinkstorage.drink = this.model.get('drink') || null
+    console.log(drinkstorage.drink)
     
-    this.$el.html(this.template());
+    this.$el.html(this.template(drinkstorage.drinkx));
 
     // This sets the intial map location on page load
     var latlng = new google.maps.LatLng(45.5200, -122.6819);
@@ -56,7 +57,10 @@ var MapView = Backbone.View.extend({
     };
     var update = yelpsearch(searchterm, address)
 
-    this.codeAddress(address);
+    _.bindAll(this, "codeAddress"); // make sure 'this' refers to this View in the success callback below
+    this.model.fetch({ // call fetch() with the following options
+       success: this.codeAddress(address) // $.ajax 'success' callback
+    });
   },
 
   // Transform the address to a location using Google's API
