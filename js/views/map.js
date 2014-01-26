@@ -1,4 +1,5 @@
 var yelpapi = require('../yelpapi');
+var app = require('../app');
 
 var MapView = Backbone.View.extend({
   el: '#map', 
@@ -6,20 +7,16 @@ var MapView = Backbone.View.extend({
   template: require('../../templates/map.hbs'),
 
   initialize: function () {
-    this.listenTo(this.model, 'change', this.render);
-    // this.model.fetch();
+    // this.listenTo(this.collection, 'reset', this.render);
+    this.listenTo(this.collection, 'add', this.addmarker);
     this.render();
   },
 
-// Render the view with a default map location.
+  // Render the view with a default map location and grabs data from yelp api and puts it into collection for bar and food w/ address 
   render: function () {
     google.maps.event.addDomListener(window, 'onload', this.initialize);
-    
-    var drinkstorage = {}
-    drinkstorage.drink = this.model.get('drink') || null
-    console.log(drinkstorage.drink)
-    
-    this.$el.html(this.template(drinkstorage.drinkx));
+        
+    this.$el.html(this.template());
 
     // This sets the intial map location on page load
     var latlng = new google.maps.LatLng(45.5200, -122.6819);
@@ -27,119 +24,116 @@ var MapView = Backbone.View.extend({
     var mapOptions = {
       zoom: 13,
       center: latlng
-    }
-
-    map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
-    
-    // if(!drinkstorage.drink) return this; // Stop and reload if data from api has not loaded.
-
-    // return this;
-  },
-
-// On button click call codeAddress
-  events: {
-    "click .geocode": "yelpDatapass",
-  },
-
-  yelpDatapass: function(){
-    var address = document.getElementById('address').value;
-    searchterm = ''
-    function yelpsearch(searchterm, address){
-        for (var x = 0; x<2; x++) {
-          if (x == 0) {
-            searchterm = 'bar'
-            yelpapi(searchterm, address);
-          } else {
-            searchterm = 'food'
-            yelpapi(searchterm, address);
-          };
-        };
     };
-    var update = yelpsearch(searchterm, address)
 
-    _.bindAll(this, "codeAddress"); // make sure 'this' refers to this View in the success callback below
-    this.model.fetch({ // call fetch() with the following options
-       success: this.codeAddress(address) // $.ajax 'success' callback
-    });
+    this.map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+
+    var address = document.getElementById('address').value;
+
+    app.collections.businesses.reset();
+
+    yelpapi('bar', address);
+    yelpapi('food', address);
+
+    var collectionstorage = {};
+    collectionstorage.businesses = this.collection.where({type: "food"}) || null;
+    console.log(collectionstorage.businesses);
+    // this.codeAddress(address) 
+  },
+
+  // On button click call codeAddress
+  events: {
+    "click .geocode": "render",
   },
 
   // Transform the address to a location using Google's API
 
+  addmarker: function() {
+    var drinkstorage = {};
+    drinkstorage.drink = this.collection.get() || null;
+    console.log(drinkstorage.drink);
+  },
+
   codeAddress: function(address) {
     console.log("Button Clicked");
 
-    var address = address.toString();
-    var geocoder = new google.maps.Geocoder();
+    // var address = address.toString();
+    // var geocoder = new google.maps.Geocoder();
 
-    geocoder.geocode( { 'address': address}, function(results, status) {
-      if (status == google.maps.GeocoderStatus.OK) {
-        map.setCenter(results[0].geometry.location);
-        var marker = new google.maps.Marker({
-            map: map,
-            position: results[0].geometry.location
-        });
-      } else {
-        alert('Search was not successful for the following reason: ' + status);
-      }
-    });
+    // //Set latlng for user address center's map on address 
+    // geocoder.geocode( { 'address': address}, function(results, status) {
+    //   if (status == google.maps.GeocoderStatus.OK) {
+    //     map.setCenter(results[0].geometry.location);
+    //     var marker = new google.maps.Marker({
+    //         map: map,
+    //         position: results[0].geometry.location
+    //     });
+    //   } else {
+    //     alert('Search was not successful for the following reason: ' + status);
+    //   }
+    // });
 
-    // Pulls data from Yelp API
-    var drinkstorage = {}
-    drinkstorage.drink = this.model.get('drink') || null
-    drinkstorage.drinkadd = this.model.get('drinkadd') || null
+    // // Pulls data from model for bar
+    // var drinkstorage = {}
+    // drinkstorage.drink = this.model.get('drink') || null
+    // drinkstorage.drinkadd = this.model.get('drinkadd') || null
 
-    console.log("Before the empty data test call");
-    if(!drinkstorage.drinkadd) return this;
-    console.log("After the empty data test call");
+    // console.log("Before the empty data test");
+    // if(!drinkstorage.drinkadd) return this;
+    // console.log("After the empty data test");
 
-    var foodstorage = {}
-    foodstorage.food = this.model.get('food') || null
-    foodstorage.foodadd = this.model.get('foodadd') || null
+    // // Pulls data from model for food
+    // var foodstorage = {}
+    // foodstorage.food = this.model.get('food') || null
+    // foodstorage.foodadd = this.model.get('foodadd') || null
 
-    // Create the info window box.
-    var drinkcontentString = '<div id="content">'+
-      '<p>'+ drinkstorage.drink +'</p>' + '<p>'+ drinkstorage.drinkadd +'</p>'+'</div>';
+    // // Create the info window box
+    // var drinkcontentString = '<div id="content">'+
+    //   '<p>'+ drinkstorage.drink +'</p>' + '<p>'+ drinkstorage.drinkadd +'</p>'+'</div>';
 
-    var foodcontentString = '<div id="content">'+
-      '<p>'+ foodstorage.food +'</p>' + '<p>'+ foodstorage.foodadd +'</p>'+'</div>';
+    // var foodcontentString = '<div id="content">'+
+    //   '<p>'+ foodstorage.food +'</p>' + '<p>'+ foodstorage.foodadd +'</p>'+'</div>';
 
-    var drinkinfowindow = new google.maps.InfoWindow({
-      content: drinkcontentString
-    });
+    // var drinkinfowindow = new google.maps.InfoWindow({
+    //   content: drinkcontentString
+    // });
 
-    var foodinfowindow = new google.maps.InfoWindow({
-      content: foodcontentString
-    });
+    // var foodinfowindow = new google.maps.InfoWindow({
+    //   content: foodcontentString
+    // });
     
-    address = drinkstorage.drinkadd 
+    // // Set address to bar    
+    // address = drinkstorage.drinkadd 
 
-    geocoder.geocode( { 'address': address}, function(results, status) {
-      if (status == google.maps.GeocoderStatus.OK) {
-        var marker = new google.maps.Marker({
-            map: map,
-            position: results[0].geometry.location
-        });
-        drinkinfowindow.open(map,marker);
-      } else {
-        alert('Search was not successful for the following reason: ' + status);
-      }
-    });
+    // // set latlng for address of bar
+    // geocoder.geocode( { 'address': address}, function(results, status) {
+    //   if (status == google.maps.GeocoderStatus.OK) {
+    //     var marker = new google.maps.Marker({
+    //         map: map,
+    //         position: results[0].geometry.location
+    //     });
+    //     drinkinfowindow.open(map,marker);
+    //   } else {
+    //     alert('Search was not successful for the following reason: ' + status);
+    //   }
+    // });
 
-    address = foodstorage.foodadd
+    // // Set address to food  
+    // address = foodstorage.foodadd
+    // // set latlng for address of food
+    // geocoder.geocode( { 'address': address}, function(results, status) {
+    //   if (status == google.maps.GeocoderStatus.OK) {
+    //     var marker = new google.maps.Marker({
+    //         map: map,
+    //         position: results[0].geometry.location
+    //     });
+    //     foodinfowindow.open(map,marker);
+    //   } else {
+    //     alert('Search was not successful for the following reason: ' + status);
+    //   }
+    // });
 
-    geocoder.geocode( { 'address': address}, function(results, status) {
-      if (status == google.maps.GeocoderStatus.OK) {
-        var marker = new google.maps.Marker({
-            map: map,
-            position: results[0].geometry.location
-        });
-        foodinfowindow.open(map,marker);
-      } else {
-        alert('Search was not successful for the following reason: ' + status);
-      }
-    });
-
-  return this;
+  // return this;
 
   },
 

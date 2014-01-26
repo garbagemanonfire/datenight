@@ -6,37 +6,26 @@ var TwitterView = require('./views/twitter');
 
 var yelpapi = require('./yelpapi');
 
-
-var searchterm = '';
-var address = '';
-
-// function yelpsearch(searchterm, address){
-//   for (var x = 0; x<2; x++) {
-//     if (x == 0) {
-//       var searchterm = 'bar'
-//       yelpapi(searchterm, address);
-//     } else {
-//       var searchterm = 'food'
-//       yelpapi(searchterm, address);
-//     };
-//   };
-// };
-
-// var init = yelpsearch(searchterm, address);
-
 var DateNiteModel = require('./models/datenite');
+
+var Businesses = require('./collections/businesses');
 
 var app = {};
 app.views = {};
 app.models = {};
+app.collections = {};
 
 app.models.dateNite = new DateNiteModel({yelpdata: {}});
 app.models.dateNite.food  = new DateNiteModel({yelpdata: {}});
 app.models.dateNite.drink  = new DateNiteModel({yelpdata: {}});
 
 app.views.date = new DateView({model: app.models.dateNite});
-app.views.map = new MapView({model: app.models.dateNite});
+// app.views.map = new MapView({model: app.models.dateNite});
 app.views.twitter = new TwitterView({model: app.models.dateNite});
+
+app.collections.businesses = new Businesses();
+
+app.views.map = new MapView({collection: app.collections.businesses});
 
 window.app = app;
 

@@ -8,8 +8,10 @@ var auth = {
   }
 };
 
-module.exports = exports = function(searchterm, address){ 
+module.exports = exports = function(search, add){ 
 
+  var searchterm = search;
+  var address = add;
   var limit = 1;
   var radius_filter = 500;
   var sort = 2;
@@ -52,20 +54,20 @@ module.exports = exports = function(searchterm, address){
     'dataType': 'jsonp',
     // 'jsonpCallback': 'cb',
     'success': function(data, textStats, XMLHttpRequest) {
+      app.collections.businesses.reset();
       if (searchterm == 'food') {
-        app.models.dateNite.set(data);
-        console.log(data);
-        var name = data.businesses[0].name;
-        var address = data.businesses[0].location.address +","+ data.businesses[0].location.city +","+ data.businesses[0].location.state_code;
-        app.models.dateNite.set({ food: name, foodadd: address });
-        console.log(data.businesses[0].name);
+        app.collections.businesses.add({
+          name: data.businesses[0].name,
+          address: data.businesses[0].location.address +","+ data.businesses[0].location.city +","+ data.businesses[0].location.state_code,
+          type: 'food'
+        });
       } else {
-        var name = data.businesses[0].name;
-        var address = data.businesses[0].location.address +", "+ data.businesses[0].location.city +", "+ data.businesses[0].location.state_code;
-        app.models.dateNite.set({ drink: name, drinkadd: address });
-        console.log(data)
-        console.log(data.businesses[0].name);
+        app.collections.businesses.add({
+          name: data.businesses[0].name,
+          address: data.businesses[0].location.address +", "+ data.businesses[0].location.city +", "+ data.businesses[0].location.state_code,
+          type: 'drink'
+        });
       };
     }
   });
-}
+};
