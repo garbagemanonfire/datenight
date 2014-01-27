@@ -4,7 +4,7 @@ body {
 }
 
 #map-canvas { 
-  height: 200px;
+  height: 275px;
   width: 375px;
   margin: 0px;
   padding: 0px;
@@ -15,7 +15,7 @@ body {
 }
 
 .well {
-  height: 500px;
+  height: 550px;
   width: auto;
 
 }

@@ -1,3 +1,7 @@
+module.exports = {
+  getResults : getResults
+};
+
 var auth = { 
   consumerKey: "sOpnEMjxxOJT9o2-TuczeQ",
   consumerSecret: "URVFfpTxXkfx55Jt74IuvKmGz2k",
@@ -8,38 +12,32 @@ var auth = {
   }
 };
 
-module.exports = exports = function(search, add){ 
+function getResults(term, near){ 
+  var $deferred = new $.Deferred(),
+    self = this,
+    limit = 1,
+    radius_filter = 500,
+    sort = 2,
+    accessor = {
+      consumerSecret: auth.consumerSecret,
+      tokenSecret: auth.accessTokenSecret
+    },
+    message = {
+      action: 'http://api.yelp.com/v2/search',
+      method: 'GET',
+      parameters: []
+    };
 
-  var searchterm = search;
-  var address = add;
-  var limit = 1;
-  var radius_filter = 500;
-  var sort = 2;
-  var term = searchterm;
-  var near = address;
-
-  parameters = [];
-  parameters.push(['term', term]);
-  parameters.push(['location', near]);
-  parameters.push(['limit', limit]);
-  parameters.push(['radius_filter', radius_filter]);
-  parameters.push(['sort', sort]);
-  parameters.push(['callback', 'cb']);
-  parameters.push(['oauth_consumer_key', auth.consumerKey]);
-  parameters.push(['oauth_consumer_secret', auth.consumerSecret]);
-  parameters.push(['oauth_token', auth.accessToken]);
-  parameters.push(['oauth_signature_method', 'HMAC-SHA1']);
-
-  var accessor = {
-    consumerSecret: auth.consumerSecret,
-    tokenSecret: auth.accessTokenSecret
-  };
-
-  var message = { 
-    'action': 'http://api.yelp.com/v2/search',
-    'method': 'GET',
-    'parameters': parameters 
-  };
+  message.parameters.push(['term', term]);
+  message.parameters.push(['location', near]);
+  message.parameters.push(['limit', limit]);
+  message.parameters.push(['radius_filter', radius_filter]);
+  message.parameters.push(['sort', sort]);
+  message.parameters.push(['callback', 'cb']);
+  message.parameters.push(['oauth_consumer_key', auth.consumerKey]);
+  message.parameters.push(['oauth_consumer_secret', auth.consumerSecret]);
+  message.parameters.push(['oauth_token', auth.accessToken]);
+  message.parameters.push(['oauth_signature_method', 'HMAC-SHA1']);
 
   OAuth.setTimestampAndNonce(message);
   OAuth.SignatureMethod.sign(message, accessor);
@@ -47,27 +45,23 @@ module.exports = exports = function(search, add){
   var parameterMap = OAuth.getParameterMap(message.parameters);
   parameterMap.oauth_signature = OAuth.percentEncode(parameterMap.oauth_signature)
 
-  $.ajax({
+  _makeApiCall.call(this, message, parameterMap)
+    .done(function(data) {
+      $deferred.resolve(data, term);
+    })
+    .fail(function() {
+      $deferred.reject();
+    });
+
+  return $deferred.promise();
+};
+
+function _makeApiCall(message, parameterMap) {
+  return $.ajax({
     'url': message.action,
     'data': parameterMap,
     'cache': true,
     'dataType': 'jsonp',
     // 'jsonpCallback': 'cb',
-    'success': function(data, textStats, XMLHttpRequest) {
-      app.collections.businesses.reset();
-      if (searchterm == 'food') {
-        app.collections.businesses.add({
-          name: data.businesses[0].name,
-          address: data.businesses[0].location.address +","+ data.businesses[0].location.city +","+ data.businesses[0].location.state_code,
-          type: 'food'
-        });
-      } else {
-        app.collections.businesses.add({
-          name: data.businesses[0].name,
-          address: data.businesses[0].location.address +", "+ data.businesses[0].location.city +", "+ data.businesses[0].location.state_code,
-          type: 'drink'
-        });
-      };
-    }
   });
 };
