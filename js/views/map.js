@@ -61,7 +61,7 @@ function addmarker(model) {
       _infowindow.call(self, marker, model);
     })
     .fail(function() {
-      console.log('it is fucked');
+      console.log("This address cannot be retrieved from the server");
     });
 };
 
