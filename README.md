@@ -19,3 +19,8 @@ Ver .02
 Ver. 03
 -Connected google maps goecode api.
 
+
+Steps to MVP left
+Twitter button
+Marker Removal 
+Infobox on click

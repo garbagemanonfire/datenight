@@ -5,11 +5,13 @@ module.exports = Backbone.View.extend({
   template: require('../../templates/map.hbs'),
   events: {
     "click .geocode": "resetMap",
+    // "click .marker" : "infoclicker"
   },
   initialize: initialize,
   render : render,
   resetMap : resetMap,
   addmarker : addmarker,
+  infoclicker : infoclicker,
 });
 
 
@@ -20,9 +22,13 @@ function initialize(viewOptions, app) {
       'Food',
       'Bar'
     ];
+  this.markers = [];
   // this.listenTo(this.collection, 'reset', this.render);
   this.listenTo(this.collection, 'add', this.addmarker);
   this.render();
+  google.maps.event.addListener(this.map, 'click', function() {
+    console.log('Clicked')
+  });
 };
 
 function render() {
@@ -51,7 +57,7 @@ function resetMap(address) {
 function addmarker(model) {
   var self = this,
     marker;
-  
+
   _geocode.call(this, model.get('address'))
     .done(function(location) {
       marker = new google.maps.Marker({ 
@@ -67,7 +73,7 @@ function addmarker(model) {
 
 function _setMap(zoom, lat, long) {
   var mapOptions = {
-      zoom: zoom ? zoom : 15,
+      zoom: zoom ? zoom : 16,
       center: new google.maps.LatLng(lat ? lat : 45.5200,long ? long : -122.6819)
     };
 
@@ -96,7 +102,6 @@ function _yelpdata(term) {
       _addModelToCollection.call(self, data, term);
     })
     .fail(function() {
-
     });
 };
 
@@ -104,17 +109,23 @@ function _addModelToCollection(data, term) {
   this.app.collections.businesses.add({
     name: data.businesses[0].name,
     address: data.businesses[0].location.address +","+ data.businesses[0].location.city +","+ data.businesses[0].location.state_code,
-    type: term
+    type: term,
+    tweetstring:["Meet me at ", data.businesses[0].name, " located at ", data.businesses[0].location.address].join("")
   });
 };
 
 function _infowindow(marker, model) {
   var contentString = '<div id="content">'+
-    '<p>'+ model.get('name') +'</p>' + '<p>'+ model.get('type') +'</p>'+'</div>';
+    '<p>'+ model.get('name') +'</p>' + '</div>'
 
   var infowindow = new google.maps.InfoWindow({
     content: contentString
   });
 
-  infowindow.open(this.map, marker);  
+  infowindow.open(this.map, marker); 
+};
+
+function infoclicker() {
+  console.log("Clicked")
+  // infowindow.open(map, marker);
 };

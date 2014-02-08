@@ -23,6 +23,7 @@ app.views.date = new DateView({model: app.models.dateNite});
 app.collections.businesses = new Businesses();
 
 app.views.map = new MapView({ collection: app.collections.businesses }, app );
+app.views.twitter = new TwitterView({ collection: app.collections.businesses }, app );
 
 window.app = app;
 

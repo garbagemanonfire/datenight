@@ -1,20 +1,34 @@
-var TwitterView = Backbone.View.extend({
+module.exports = Backbone.View.extend({
   el: '#twitter',
-  
   template: require('../../templates/twitter.hbs'),
-
-  initialize: function () {
-    this.listenTo(this.model, 'change', this.render);
-    this.render();
+  events: {
+    "click .twitter-share-button": "onTweet",
   },
-
-  render: function () {
-    var context = {}
-    context.currently = this.model.get('currently') || {};
-    this.$el.html(this.template(context));
-    return this;
-  }
-
+  initialize: initialize,
+  render : render,
+  onTweet : onTweet,
+  tweetBuild : tweetBulid,
 });
 
-module.exports = TwitterView;
+function initialize(app) {
+  this.app = app;
+  this.context = {};
+  this.listenTo(this.collection, 'add', tweetBulid);
+  this.render();
+};
+
+function render() {
+  this.$el.html(this.template());
+
+};
+
+function tweetBulid(model) {
+  this.context.businesses0 = this.collection.models[0];
+  this.context.businesses1 = this.collection.models[1];
+  this.$el.html(this.template(this.context));
+};
+
+function onTweet() {
+
+  !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");  
+};
