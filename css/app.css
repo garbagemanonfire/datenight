@@ -1,15 +1,11 @@
 body {
   margin: 1%;
   width: 400px;
-}
-
-.container {
-  width: 400px;
+  height: auto
 }
 
 .well {
   height: 600px;
-  width: auto;
 }
 
 .food {
@@ -28,12 +24,13 @@ body {
     margin: 5%;
 }
 
-
 #map-canvas { 
-  height: 275px;
+  height: 265px;
   width: 375px;
   margin: 0px;
   padding: 0px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 #address {
@@ -47,11 +44,11 @@ body {
 }
 
 #restaurantIcon {
-  width: 50px;
-  height: 50px;
+  width: 50%;
+  height: 50%;
 }
 
 #barIcon {
-  width: 50px;
-  height: 50px;
+  width: 50%;
+  height: 50%;
 }

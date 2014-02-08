@@ -58,17 +58,33 @@ function addmarker(model) {
   var self = this,
     marker;
 
+  // if(!this.collection.models[1]) return this;
+  
+
+  if (!this.markers.length == 0 && !this.collection.models[1]) {
+    console.log("add marker called after")
+   _removeMarkers(null, this.markers);
+   this.markers = [];
+  };
+
   _geocode.call(this, model.get('address'))
     .done(function(location) {
       marker = new google.maps.Marker({ 
         map: self.map,
         position: location
       });
+      self.markers.push(marker);
       _infowindow.call(self, marker, model);
     })
     .fail(function() {
       console.log("This address cannot be retrieved from the server");
     });
+};
+
+function _removeMarkers(map, markers) {
+  for (var i = 0; i < markers.length; i++) {
+    markers[i].setMap(map);
+  };
 };
 
 function _setMap(zoom, lat, long) {
