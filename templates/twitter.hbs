@@ -1,8 +1,21 @@
-<div>
-{{!--  might have to put expr: in front of the data element for the text. --}}
-   <a href="https://twitter.com/share" class="twitter-share-button" data-text="{{businesses0.attributes.tweetstring}}" data-lang="en">Tweet</a>
-   <p>{{businesses0.attributes.tweetstring}}</p>
-    
-    <a href="https://twitter.com/share" class="twitter-share-button" data-text="{{businesses1.attributes.tweetstring}}" data-lang="en">Tweet</a>
-    <p>{{businesses1.attributes.tweetstring}}</p>
+<script type="text/javascript" src="js/lib/fancyjq.js"></script>
+
+<div class="buttons">
+    <div class="food-container">
+        <div class="food">
+            <img src="images/buttons/Bread-Icon.jpg" id="restaurantIcon" alt="Restaurant" title="Restaurant"/>
+            <h5>Feed Me</h5>
+            <a href="https://twitter.com/share" class="twitter-share-button" data-text="{{businesses0.attributes.tweetstring}}" data-lang="en">Tweet</a>
+            <p>{{businesses0.attributes.tweetstring}}</p>
+        </div>
+    </div>
+      
+    <div class="drink-container">
+        <div class="drink">
+            <img src="images/buttons/Beer-Icon.jpg" id="barIcon" alt="Bar" title="Bar"/>
+            <h5>Beer Me</h5>
+            <a href="https://twitter.com/share" class="twitter-share-button" data-text="{{businesses1.attributes.tweetstring}}" data-lang="en">Tweet</a>
+            <p>{{businesses1.attributes.tweetstring}}</p>
+        </div>
+    </div>
 </div>

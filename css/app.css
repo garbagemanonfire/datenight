@@ -3,21 +3,37 @@ body {
   width: 400px;
 }
 
-#map-canvas { 
-  height: 275px;
-  width: 375px;
-  margin: 0px;
-  padding: 0px;
-}
-
 .container {
   width: 400px;
 }
 
 .well {
-  height: 550px;
+  height: 600px;
   width: auto;
+}
 
+.food {
+  float: left;
+  width: 40%;
+  padding: 4px;
+  text-align: center;
+    margin: 5%;
+}
+
+.drink {
+  float: right;
+  width: 40%;
+  padding: 4px;
+  text-align: center;
+    margin: 5%;
+}
+
+
+#map-canvas { 
+  height: 275px;
+  width: 375px;
+  margin: 0px;
+  padding: 0px;
 }
 
 #address {
@@ -30,36 +46,12 @@ body {
   width: 33%;
 }
 
-.food {
-  background-color: #F5AD4E;
-  float: left;
-  width: 40%;
-  padding: 4px;
-  text-align: center;
-  border-color: #2C3E50;
-  border-style: solid;
-  border-width: 1%;
-    margin: 5%;
-}
-
-.drink {
-  background-color: #F5AD4E;
-  float: right;
-  width: 40%;
-  padding: 4px;
-  text-align: center;
-  border-color: #2C3E50;
-  border-style: solid;
-  border-width: 1%;
-    margin: 5%;
-}
-
 #restaurantIcon {
-  width: 50%px;
+  width: 50px;
   height: 50px;
 }
 
 #barIcon {
-  width: 50%px;
+  width: 50px;
   height: 50px;
 }
