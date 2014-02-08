@@ -23,12 +23,14 @@ function initialize(viewOptions, app) {
       'Bar'
     ];
   this.markers = [];
-  // this.listenTo(this.collection, 'reset', this.render);
   this.listenTo(this.collection, 'add', this.addmarker);
   this.render();
   google.maps.event.addListener(this.map, 'click', function() {
-    console.log('Clicked')
+    console.log('Clicked');
   });
+  // google.maps.event.addListener(this.marker, 'click', function() {
+  //   infowindow.open(map,marker);
+  // });
 };
 
 function render() {
@@ -58,11 +60,7 @@ function addmarker(model) {
   var self = this,
     marker;
 
-  // if(!this.collection.models[1]) return this;
-  
-
   if (!this.markers.length == 0 && !this.collection.models[1]) {
-    console.log("add marker called after")
    _removeMarkers(null, this.markers);
    this.markers = [];
   };
@@ -138,7 +136,7 @@ function _infowindow(marker, model) {
     content: contentString
   });
 
-  infowindow.open(this.map, marker); 
+  // infowindow.close(this.map, marker); 
 };
 
 function infoclicker() {
