@@ -19,7 +19,8 @@ function initialize(app) {
 
 function render() {
   this.$el.html(this.template());
-  this.onTweet();
+  // disabled, but shows button on first page view
+  // this.onTweet();
 };
 
 function tweetBulid(model) {
