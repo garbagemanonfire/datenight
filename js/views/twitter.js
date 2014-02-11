@@ -24,8 +24,8 @@ function render() {
 function tweetBulid(model) {
   this.context.businesses0 = this.collection.models[0];
   this.context.businesses1 = this.collection.models[1];
-  this.onTweet();
   this.$el.html(this.template(this.context));
+  this.onTweet();
 };
 
 function onTweet() {
