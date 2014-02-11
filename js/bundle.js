@@ -770,11 +770,11 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 
   buffer += "<script type=\"text/javascript\" src=\"js/lib/fancyjq.js\"></script>\n\n<div class=\"buttons\">\n    <div class=\"food-container\">\n        <div class=\"food\">\n            <h4>Feed Me</h4>\n            <img src=\"images/buttons/Bread-Icon.jpg\" id=\"restaurantIcon\" alt=\"Restaurant\" title=\"Restaurant\"/>\n            </br>\n            <a href=\"https://twitter.com/share\" class=\"twitter-share-button\" data-size=\"large\" data-text=\""
     + escapeExpression(((stack1 = ((stack1 = ((stack1 = (depth0 && depth0.businesses0)),stack1 == null || stack1 === false ? stack1 : stack1.attributes)),stack1 == null || stack1 === false ? stack1 : stack1.tweetstring)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "\" data-lang=\"en\">Tweet</a>\n            <p>"
+    + "\" data-count=\"none\" data-lang=\"en\">Tweet</a>\n            <p>"
     + escapeExpression(((stack1 = ((stack1 = ((stack1 = (depth0 && depth0.businesses0)),stack1 == null || stack1 === false ? stack1 : stack1.attributes)),stack1 == null || stack1 === false ? stack1 : stack1.tweetstring)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "</p>\n        </div>\n    </div>\n      \n    <div class=\"drink-container\">\n        <div class=\"drink\">\n            <h4>Beer Me</h4>\n            <img src=\"images/buttons/Beer-icon.jpg\" id=\"barIcon\" alt=\"Bar\" title=\"Bar\"/>\n            </br>\n            <a href=\"https://twitter.com/share\" class=\"twitter-share-button\" data-size=\"large\" data-text=\""
     + escapeExpression(((stack1 = ((stack1 = ((stack1 = (depth0 && depth0.businesses1)),stack1 == null || stack1 === false ? stack1 : stack1.attributes)),stack1 == null || stack1 === false ? stack1 : stack1.tweetstring)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "\" data-lang=\"en\">Tweet</a>\n            <p>"
+    + "\" data-count=\"none\" data-lang=\"en\" >Tweet</a>\n            <p>"
     + escapeExpression(((stack1 = ((stack1 = ((stack1 = (depth0 && depth0.businesses1)),stack1 == null || stack1 === false ? stack1 : stack1.attributes)),stack1 == null || stack1 === false ? stack1 : stack1.tweetstring)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "</p>\n        </div>\n    </div>\n</div>\n";
   return buffer;
