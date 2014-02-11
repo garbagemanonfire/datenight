@@ -1,8 +1,7 @@
 ;(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 $(function () { 
 
-var DateView = require('./views/date'),
-    MapView = require('./views/map'),
+var MapView = require('./views/map'),
     TwitterView = require('./views/twitter'),
     yelpapi = require('./yelpapi'),
     DateNiteModel = require('./models/datenite'),
@@ -17,18 +16,15 @@ app.models.dateNite = new DateNiteModel({yelpdata: {}});
 app.models.dateNite.food  = new DateNiteModel({yelpdata: {}});
 app.models.dateNite.drink  = new DateNiteModel({yelpdata: {}});
 
-app.views.date = new DateView({model: app.models.dateNite});
-// app.views.map = new MapView({model: app.models.dateNite});
-// app.views.twitter = new TwitterView({model: app.models.dateNite});
-
 app.collections.businesses = new Businesses();
 
 app.views.map = new MapView({ collection: app.collections.businesses }, app );
+app.views.twitter = new TwitterView({ collection: app.collections.businesses }, app );
 
 window.app = app;
 
 });
-},{"./collections/businesses":2,"./models/datenite":3,"./views/date":4,"./views/map":5,"./views/twitter":6,"./yelpapi":7}],2:[function(require,module,exports){
+},{"./collections/businesses":2,"./models/datenite":3,"./views/map":4,"./views/twitter":5,"./yelpapi":6}],2:[function(require,module,exports){
 var DateNiteModel = require('../models/datenite');
 
 var Businesses = Backbone.Collection.extend({
@@ -47,27 +43,6 @@ var DateNiteModel = Backbone.Model.extend({
 module.exports = DateNiteModel;
 
 },{}],4:[function(require,module,exports){
-var DateView = Backbone.View.extend({
-  el: '#current',
-
-  template: require('../../templates/date.hbs'),
-
-  initialize: function () {
-    this.listenTo(this.model, 'change', this.render);
-    this.render();
-  },
-
-  render: function () {
-    var context = {}
-    context.businesses = this.model.get('businesses') || {};
-    this.$el.html(this.template(context));
-    return this;
-  },
-
-});
-
-module.exports = DateView;
-},{"../../templates/date.hbs":14}],5:[function(require,module,exports){
 var yelpapi = require('../yelpapi');
 
 module.exports = Backbone.View.extend({
@@ -75,11 +50,13 @@ module.exports = Backbone.View.extend({
   template: require('../../templates/map.hbs'),
   events: {
     "click .geocode": "resetMap",
+    // "click .marker" : "infoclicker"
   },
   initialize: initialize,
   render : render,
   resetMap : resetMap,
   addmarker : addmarker,
+  infoclicker : infoclicker,
 });
 
 
@@ -90,9 +67,15 @@ function initialize(viewOptions, app) {
       'Food',
       'Bar'
     ];
-  // this.listenTo(this.collection, 'reset', this.render);
+  this.markers = [];
   this.listenTo(this.collection, 'add', this.addmarker);
   this.render();
+  google.maps.event.addListener(this.map, 'click', function() {
+    console.log('Clicked');
+  });
+  // google.maps.event.addListener(this.marker, 'click', function() {
+  //   infowindow.open(map,marker);
+  // });
 };
 
 function render() {
@@ -121,13 +104,19 @@ function resetMap(address) {
 function addmarker(model) {
   var self = this,
     marker;
-  
+
+  if (!this.markers.length == 0 && !this.collection.models[1]) {
+   _removeMarkers(null, this.markers);
+   this.markers = [];
+  };
+
   _geocode.call(this, model.get('address'))
     .done(function(location) {
       marker = new google.maps.Marker({ 
         map: self.map,
         position: location
       });
+      self.markers.push(marker);
       _infowindow.call(self, marker, model);
     })
     .fail(function() {
@@ -135,9 +124,15 @@ function addmarker(model) {
     });
 };
 
+function _removeMarkers(map, markers) {
+  for (var i = 0; i < markers.length; i++) {
+    markers[i].setMap(map);
+  };
+};
+
 function _setMap(zoom, lat, long) {
   var mapOptions = {
-      zoom: zoom ? zoom : 15,
+      zoom: zoom ? zoom : 16,
       center: new google.maps.LatLng(lat ? lat : 45.5200,long ? long : -122.6819)
     };
 
@@ -166,7 +161,6 @@ function _yelpdata(term) {
       _addModelToCollection.call(self, data, term);
     })
     .fail(function() {
-
     });
 };
 
@@ -174,42 +168,63 @@ function _addModelToCollection(data, term) {
   this.app.collections.businesses.add({
     name: data.businesses[0].name,
     address: data.businesses[0].location.address +","+ data.businesses[0].location.city +","+ data.businesses[0].location.state_code,
-    type: term
+    type: term,
+    tweetstring:["Meet me at ", data.businesses[0].name, " located at ", data.businesses[0].location.address].join("")
   });
 };
 
 function _infowindow(marker, model) {
   var contentString = '<div id="content">'+
-    '<p>'+ model.get('name') +'</p>' + '<p>'+ model.get('type') +'</p>'+'</div>';
+    '<p>'+ model.get('name') +'</p>' + '</div>'
 
   var infowindow = new google.maps.InfoWindow({
     content: contentString
   });
 
-  infowindow.open(this.map, marker);  
+  // infowindow.close(this.map, marker); 
 };
-},{"../../templates/map.hbs":15,"../yelpapi":7}],6:[function(require,module,exports){
-var TwitterView = Backbone.View.extend({
+
+function infoclicker() {
+  console.log("Clicked")
+  // infowindow.open(map, marker);
+};
+
+},{"../../templates/map.hbs":13,"../yelpapi":6}],5:[function(require,module,exports){
+module.exports = Backbone.View.extend({
   el: '#twitter',
-  
   template: require('../../templates/twitter.hbs'),
-
-  initialize: function () {
-    this.listenTo(this.model, 'change', this.render);
-    this.render();
-  },
-
-  render: function () {
-    var context = {}
-    context.currently = this.model.get('currently') || {};
-    this.$el.html(this.template(context));
-    return this;
-  }
-
+  // events: {
+  //   "click .twitter-share-button": "onTweet",
+  // },
+  initialize: initialize,
+  render : render,
+  onTweet : onTweet,
+  tweetBuild : tweetBulid,
 });
 
-module.exports = TwitterView;
-},{"../../templates/twitter.hbs":16}],7:[function(require,module,exports){
+function initialize(app) {
+  this.app = app;
+  this.context = {};
+  this.listenTo(this.collection, 'add', tweetBulid);
+  this.render();
+};
+
+function render() {
+  this.$el.html(this.template());
+};
+
+function tweetBulid(model) {
+  this.context.businesses0 = this.collection.models[0];
+  this.context.businesses1 = this.collection.models[1];
+  this.$el.html(this.template(this.context));
+  this.onTweet();
+};
+
+function onTweet() {
+  !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");  
+};
+
+},{"../../templates/twitter.hbs":14}],6:[function(require,module,exports){
 module.exports = {
   getResults : getResults
 };
@@ -278,7 +293,7 @@ function _makeApiCall(message, parameterMap) {
   });
 };
 
-},{}],8:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 "use strict";
 var base = require("./handlebars/base");
 
@@ -310,7 +325,7 @@ var Handlebars = create();
 Handlebars.create = create;
 
 exports["default"] = Handlebars;
-},{"./handlebars/base":9,"./handlebars/exception":10,"./handlebars/runtime":11,"./handlebars/safe-string":12,"./handlebars/utils":13}],9:[function(require,module,exports){
+},{"./handlebars/base":8,"./handlebars/exception":9,"./handlebars/runtime":10,"./handlebars/safe-string":11,"./handlebars/utils":12}],8:[function(require,module,exports){
 "use strict";
 /*globals Exception, Utils */
 var Utils = require("./utils");
@@ -488,7 +503,7 @@ exports.log = log;var createFrame = function(object) {
   return obj;
 };
 exports.createFrame = createFrame;
-},{"./exception":10,"./utils":13}],10:[function(require,module,exports){
+},{"./exception":9,"./utils":12}],9:[function(require,module,exports){
 "use strict";
 
 var errorProps = ['description', 'fileName', 'lineNumber', 'message', 'name', 'number', 'stack'];
@@ -505,7 +520,7 @@ function Exception(/* message */) {
 Exception.prototype = new Error();
 
 exports["default"] = Exception;
-},{}],11:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 "use strict";
 /*global Utils */
 var Utils = require("./utils");
@@ -649,7 +664,7 @@ exports.program = program;function invokePartial(partial, name, context, helpers
 exports.invokePartial = invokePartial;function noop() { return ""; }
 
 exports.noop = noop;
-},{"./base":9,"./exception":10,"./utils":13}],12:[function(require,module,exports){
+},{"./base":8,"./exception":9,"./utils":12}],11:[function(require,module,exports){
 "use strict";
 // Build out our basic SafeString type
 function SafeString(string) {
@@ -661,7 +676,7 @@ SafeString.prototype.toString = function() {
 };
 
 exports["default"] = SafeString;
-},{}],13:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 "use strict";
 var SafeString = require("./safe-string")["default"];
 
@@ -737,16 +752,7 @@ exports.escapeExpression = escapeExpression;function isEmpty(value) {
 }
 
 exports.isEmpty = isEmpty;
-},{"./safe-string":12}],14:[function(require,module,exports){
-var templater = require("/Users/nmcgiver/Code/JavaScript/Datenite/datenight/node_modules/browserify-handlebars/node_modules/handlebars/dist/cjs/handlebars.runtime").default.template;module.exports = templater(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  
-
-
-  return "<script type=\"text/javascript\" src=\"js/lib/fancyjq.js\"></script>\n\n<div class=\"buttons\">\n    <div type= \"button\" class=\"food btn active\">\n        <img src=\"images/buttons/Bread-Icon.jpg\" id=\"restaurantIcon\" alt=\"Restaurant\" title=\"Restaurant\"/>\n        <h4>Feed Me</h4>\n        <div class=\"link\" id=\"closestRest\">\n        </div>\n    </div>\n      \n    <div type=\"button\" class=\"drink btn active\">\n        <img src=\"images/buttons/Beer-Icon.jpg\" id=\"barIcon\" alt=\"Bar\" title=\"Bar\"/>\n        <h4>Beer Me</h4>\n        <div class=\"link\" id=\"closestBar\">\n        </div>\n    </div>\n</div>\n\n\n";
-  });
-},{"/Users/nmcgiver/Code/JavaScript/Datenite/datenight/node_modules/browserify-handlebars/node_modules/handlebars/dist/cjs/handlebars.runtime":8}],15:[function(require,module,exports){
+},{"./safe-string":11}],13:[function(require,module,exports){
 var templater = require("/Users/nmcgiver/Code/JavaScript/Datenite/datenight/node_modules/browserify-handlebars/node_modules/handlebars/dist/cjs/handlebars.runtime").default.template;module.exports = templater(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
@@ -755,14 +761,23 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 
   return "<input id=\"address\" type=\"text\" class=\"form-control col-lg-8\" value=\"Portland, OR\">\n<input id=\"searchbtn\" type=\"button\" value=\"Find\" class=\"geocode btn btn-success\">\n    <br>\n    <br>\n    <br>\n<div id=\"map-canvas\"></div>";
   });
-},{"/Users/nmcgiver/Code/JavaScript/Datenite/datenight/node_modules/browserify-handlebars/node_modules/handlebars/dist/cjs/handlebars.runtime":8}],16:[function(require,module,exports){
+},{"/Users/nmcgiver/Code/JavaScript/Datenite/datenight/node_modules/browserify-handlebars/node_modules/handlebars/dist/cjs/handlebars.runtime":7}],14:[function(require,module,exports){
 var templater = require("/Users/nmcgiver/Code/JavaScript/Datenite/datenight/node_modules/browserify-handlebars/node_modules/handlebars/dist/cjs/handlebars.runtime").default.template;module.exports = templater(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  
+  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
-  return "<h3>Twitter tab</h3>\n";
+  buffer += "<script type=\"text/javascript\" src=\"js/lib/fancyjq.js\"></script>\n\n<div class=\"buttons\">\n    <div class=\"food-container\">\n        <div class=\"food\">\n            <h4>Feed Me</h4>\n            <img src=\"images/buttons/Bread-Icon.jpg\" id=\"restaurantIcon\" alt=\"Restaurant\" title=\"Restaurant\"/>\n            </br>\n            <a href=\"https://twitter.com/share\" class=\"twitter-share-button\" data-text=\""
+    + escapeExpression(((stack1 = ((stack1 = ((stack1 = (depth0 && depth0.businesses0)),stack1 == null || stack1 === false ? stack1 : stack1.attributes)),stack1 == null || stack1 === false ? stack1 : stack1.tweetstring)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "\" data-lang=\"en\">Tweet</a>\n            <p>"
+    + escapeExpression(((stack1 = ((stack1 = ((stack1 = (depth0 && depth0.businesses0)),stack1 == null || stack1 === false ? stack1 : stack1.attributes)),stack1 == null || stack1 === false ? stack1 : stack1.tweetstring)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "</p>\n        </div>\n    </div>\n      \n    <div class=\"drink-container\">\n        <div class=\"drink\">\n            <h4>Beer Me</h4>\n            <img src=\"images/buttons/Beer-Icon.jpg\" id=\"barIcon\" alt=\"Bar\" title=\"Bar\"/>\n            </br>\n            <a href=\"https://twitter.com/share\" class=\"twitter-share-button\" data-text=\""
+    + escapeExpression(((stack1 = ((stack1 = ((stack1 = (depth0 && depth0.businesses1)),stack1 == null || stack1 === false ? stack1 : stack1.attributes)),stack1 == null || stack1 === false ? stack1 : stack1.tweetstring)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "\" data-lang=\"en\">Tweet</a>\n            <p>"
+    + escapeExpression(((stack1 = ((stack1 = ((stack1 = (depth0 && depth0.businesses1)),stack1 == null || stack1 === false ? stack1 : stack1.attributes)),stack1 == null || stack1 === false ? stack1 : stack1.tweetstring)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "</p>\n        </div>\n    </div>\n</div>";
+  return buffer;
   });
-},{"/Users/nmcgiver/Code/JavaScript/Datenite/datenight/node_modules/browserify-handlebars/node_modules/handlebars/dist/cjs/handlebars.runtime":8}]},{},[1])
+},{"/Users/nmcgiver/Code/JavaScript/Datenite/datenight/node_modules/browserify-handlebars/node_modules/handlebars/dist/cjs/handlebars.runtime":7}]},{},[1])
 ;
