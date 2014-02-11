@@ -1,9 +1,9 @@
 module.exports = Backbone.View.extend({
   el: '#twitter',
   template: require('../../templates/twitter.hbs'),
-  events: {
-    "click .twitter-share-button": "onTweet",
-  },
+  // events: {
+  //   "click .twitter-share-button": "onTweet",
+  // },
   initialize: initialize,
   render : render,
   onTweet : onTweet,
@@ -24,6 +24,7 @@ function render() {
 function tweetBulid(model) {
   this.context.businesses0 = this.collection.models[0];
   this.context.businesses1 = this.collection.models[1];
+  this.onTweet();
   this.$el.html(this.template(this.context));
 };
 
