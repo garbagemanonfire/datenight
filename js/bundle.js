@@ -211,6 +211,7 @@ function initialize(app) {
 
 function render() {
   this.$el.html(this.template());
+  this.onTweet();
 };
 
 function tweetBulid(model) {
