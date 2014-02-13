@@ -1,11 +1,12 @@
 var yelpapi = require('../yelpapi');
 
 module.exports = Backbone.View.extend({
-  el: '#map', 
+  el: '#map',
   template: require('../../templates/map.hbs'),
   events: {
     "click .geocode": "resetMap",
-    // "click .marker" : "infoclicker"
+    "click #food" : "infoclicker",
+    "click #drink" : "infoclicker",
   },
   initialize: initialize,
   render : render,
@@ -23,14 +24,9 @@ function initialize(viewOptions, app) {
       'Bar'
     ];
   this.markers = [];
+  this.infowindows = [];
   this.listenTo(this.collection, 'add', this.addmarker);
   this.render();
-  google.maps.event.addListener(this.map, 'click', function() {
-    console.log('Clicked');
-  });
-  // google.maps.event.addListener(this.marker, 'click', function() {
-  //   infowindow.open(map,marker);
-  // });
 };
 
 function render() {
@@ -49,7 +45,7 @@ function resetMap(address) {
       self.map.setCenter(location);
       _.each(self.terms, function(term) {
         _yelpdata.call(self, term);
-      }); 
+      });
     })
     .fail(function(status){
       alert("This address cannot be retrieved from the server");
@@ -61,13 +57,13 @@ function addmarker(model) {
     marker;
 
   if (!this.markers.length == 0 && !this.collection.models[1]) {
-   _removeMarkers(null, this.markers);
-   this.markers = [];
+   _removeMarkers.call(this);
+   _removeInfowindows.call(this);
   };
 
   _geocode.call(this, model.get('address'))
     .done(function(location) {
-      marker = new google.maps.Marker({ 
+      marker = new google.maps.Marker({
         map: self.map,
         position: location
       });
@@ -79,10 +75,25 @@ function addmarker(model) {
     });
 };
 
-function _removeMarkers(map, markers) {
-  for (var i = 0; i < markers.length; i++) {
-    markers[i].setMap(map);
-  };
+function infoclicker(e) {
+  var self = this,
+    id = e.target.id,
+    infowindow,
+    marker;
+
+    e.preventDefault();
+
+    if (id == 'food' || id == 'resturantIcon') {
+      marker = self.markers[0];
+      infowindow = self.infowindows[0];
+      infowindow.open(this.map, marker);
+    } else if (id == 'drink' || id == 'barIcon') {
+      console.log('inside');
+      marker = self.markers[1];
+      infowindow = self.infowindows[1];
+      infowindow.open(this.map, marker);
+    };
+
 };
 
 function _setMap(zoom, lat, long) {
@@ -92,6 +103,20 @@ function _setMap(zoom, lat, long) {
     };
 
   this.map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+};
+
+function _removeMarkers(map, markers) {
+  for (var i = 0; i < this.markers.length; i++) {
+    this.markers[i].setMap(null);
+  };
+  this.markers = [];
+};
+
+function _removeInfowindows(map, infowindows) {
+  for (var i = 0; i < this.infowindows.length; i++) {
+    this.infowindows[i].setMap(null);
+  };
+  this.infowindows = [];
 };
 
 function _geocode(address) {
@@ -129,17 +154,13 @@ function _addModelToCollection(data, term) {
 };
 
 function _infowindow(marker, model) {
+
   var contentString = '<div id="content">'+
-    '<p>'+ model.get('name') +'</p>' + '</div>'
+    '<p>'+ model.get('name') +'</p>' + '</div>';
 
   var infowindow = new google.maps.InfoWindow({
     content: contentString
   });
 
-  // infowindow.close(this.map, marker); 
-};
-
-function infoclicker() {
-  console.log("Clicked")
-  // infowindow.open(map, marker);
+  this.infowindows.push(infowindow);
 };

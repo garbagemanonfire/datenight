@@ -11,24 +11,36 @@ body {
 .food {
   float: left;
   width: 40%;
-  padding: 4px;
+  padding: 2%;
   text-align: center;
-    margin: 5%;
+  margin: 1% 5%;
 }
 
 .drink {
   float: right;
   width: 40%;
-  padding: 4px;
+  padding: 2%;
   text-align: center;
-    margin: 5%;
+  margin: 1% 5%;
+}
+
+.tweet-food {
+  float: left;
+  width: 40%;
+  text-align: center;
+  margin: 0% 5%;
+}
+
+.tweet-drink {
+  float: right;
+  width: 40%;
+  text-align: center;
+  margin: 0% 5%;
 }
 
 #map-canvas { 
   height: 265px;
   width: 375px;
-  margin: 0px;
-  padding: 0px;
   margin-left: auto;
   margin-right: auto;
 }

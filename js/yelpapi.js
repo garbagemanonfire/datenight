@@ -2,21 +2,21 @@ module.exports = {
   getResults : getResults
 };
 
-var auth = { 
+var auth = {
   consumerKey: "sOpnEMjxxOJT9o2-TuczeQ",
   consumerSecret: "URVFfpTxXkfx55Jt74IuvKmGz2k",
   accessToken: "Qx_zcTVcrma7NBQkyUw9n8e3N-uRsyal",
   accessTokenSecret: "EnPUU_HlKUY9FmtSQBc1yFKTJsA",
-  serviceProvider: { 
+  serviceProvider: {
     signatureMethod: "HMAC-SHA1"
   }
 };
 
-function getResults(term, near){ 
+function getResults(term, near){
   var $deferred = new $.Deferred(),
     self = this,
     limit = 1,
-    radius_filter = 200,
+    radius_filter = 750,
     sort = 2,
     accessor = {
       consumerSecret: auth.consumerSecret,

@@ -7,8 +7,8 @@ body {
   width: 400px;
 }
 
-#map-canvas { 
-  height: 100% 
+#map-canvas {
+  height: 100%
 }
 
 .container {
@@ -26,6 +26,7 @@ thead {
   border-width: 5%;
     margin: 10%;
 }
+
 #restaurantIcon {
   width: 100px;
   height: 100px;

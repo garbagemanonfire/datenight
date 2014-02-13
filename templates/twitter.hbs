@@ -1,23 +1,10 @@
-<script type="text/javascript" src="js/lib/fancyjq.js"></script>
-
-<div class="buttons">
-    <div class="food-container">
-        <div class="food">
-            <h4>Feed Me</h4>
-            <img src="images/buttons/Bread-Icon.jpg" id="restaurantIcon" alt="Restaurant" title="Restaurant"/>
-            </br>
-            <a href="https://twitter.com/intent/tweet?button_hashtag=feedme" class="twitter-hashtag-button" data-size="large" data-text="{{businesses0.attributes.tweetstring}}" data-count="none" data-lang="en">Tweet</a>
-            <p>{{businesses0.attributes.tweetstring}}</p>
-        </div>
+<div class="twitter">
+    <div class="tweet-food">
+        <a href="https://twitter.com/intent/tweet?button_hashtag=feedme" class="twitter-hashtag-button" data-size="large" data-text="{{businesses0.attributes.tweetstring}}" data-count="none" data-lang="en">Tweet</a>
+        <p>{{businesses0.attributes.name}}</p>
     </div>
-      
-    <div class="drink-container">
-        <div class="drink">
-            <h4>Beer Me</h4>
-            <img src="images/buttons/Beer-icon.jpg" id="barIcon" alt="Bar" title="Bar"/>
-            </br>
-            <a href="https://twitter.com/intent/tweet?button_hashtag=beerme" class="twitter-hashtag-button" data-size="large" data-text="{{businesses1.attributes.tweetstring}}" data-count="none" data-lang="en" >Tweet</a>
-            <p>{{businesses1.attributes.tweetstring}}</p> 
-        </div>
+    <div class="tweet-drink">
+        <a href="https://twitter.com/intent/tweet?button_hashtag=beerme" class="twitter-hashtag-button" data-size="large" data-text="{{businesses1.attributes.tweetstring}}" data-count="none" data-lang="en" >Tweet</a>
+        <p>{{businesses1.attributes.name}}</p>
     </div>
 </div>
