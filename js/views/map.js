@@ -13,8 +13,8 @@ module.exports = Backbone.View.extend({
   resetMap : resetMap,
   addmarker : addmarker,
   infoclicker : infoclicker,
+  centerMap : centerMap,
 });
-
 
 function initialize(viewOptions, app) {
   this.app = app;
@@ -23,9 +23,11 @@ function initialize(viewOptions, app) {
       'Food',
       'Bar'
     ];
+  this.map = {};
   this.markers = [];
   this.infowindows = [];
   this.listenTo(this.collection, 'add', this.addmarker);
+  google.maps.visualRefresh = true;
   this.render();
 };
 
@@ -50,6 +52,8 @@ function resetMap(address) {
     .fail(function(status){
       alert("This address cannot be retrieved from the server");
     });
+
+  this.centerMap(this, this.map, this.markers);
 };
 
 function addmarker(model) {
@@ -75,6 +79,16 @@ function addmarker(model) {
     });
 };
 
+function centerMap(map, markers){
+  var bounds = new google.maps.LatLngBounds();
+
+  for(i=0;i<markers.length;i++) {
+    bounds.extend(markers[i].getPosition());
+  };
+
+  this.map.fitBounds(bounds);
+};
+
 function infoclicker(e) {
   var self = this,
     id = e.target.id,
@@ -88,20 +102,18 @@ function infoclicker(e) {
       infowindow = self.infowindows[0];
       infowindow.open(this.map, marker);
     } else if (id == 'drink' || id == 'barIcon') {
-      console.log('inside');
       marker = self.markers[1];
       infowindow = self.infowindows[1];
       infowindow.open(this.map, marker);
     };
-
 };
 
 function _setMap(zoom, lat, long) {
   var mapOptions = {
-      zoom: zoom ? zoom : 16,
+      zoom: zoom ? zoom : 15,
+      minZoom: 14,
       center: new google.maps.LatLng(lat ? lat : 45.5200,long ? long : -122.6819)
     };
-
   this.map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
 };
 
@@ -159,7 +171,8 @@ function _infowindow(marker, model) {
     '<p>'+ model.get('name') +'</p>' + '</div>';
 
   var infowindow = new google.maps.InfoWindow({
-    content: contentString
+    content: contentString,
+    maxWidth: 700
   });
 
   this.infowindows.push(infowindow);

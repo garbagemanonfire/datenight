@@ -16,7 +16,7 @@ function getResults(term, near){
   var $deferred = new $.Deferred(),
     self = this,
     limit = 1,
-    radius_filter = 750,
+    radius_filter = 1000,
     sort = 2,
     accessor = {
       consumerSecret: auth.consumerSecret,

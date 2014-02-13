@@ -46,19 +46,20 @@ module.exports = DateNiteModel;
 var yelpapi = require('../yelpapi');
 
 module.exports = Backbone.View.extend({
-  el: '#map', 
+  el: '#map',
   template: require('../../templates/map.hbs'),
   events: {
     "click .geocode": "resetMap",
-    // "click .marker" : "infoclicker"
+    "click #food" : "infoclicker",
+    "click #drink" : "infoclicker",
   },
   initialize: initialize,
   render : render,
   resetMap : resetMap,
   addmarker : addmarker,
   infoclicker : infoclicker,
+  centerMap : centerMap,
 });
-
 
 function initialize(viewOptions, app) {
   this.app = app;
@@ -67,15 +68,12 @@ function initialize(viewOptions, app) {
       'Food',
       'Bar'
     ];
+  this.map = {};
   this.markers = [];
+  this.infowindows = [];
   this.listenTo(this.collection, 'add', this.addmarker);
+  google.maps.visualRefresh = true;
   this.render();
-  google.maps.event.addListener(this.map, 'click', function() {
-    console.log('Clicked');
-  });
-  // google.maps.event.addListener(this.marker, 'click', function() {
-  //   infowindow.open(map,marker);
-  // });
 };
 
 function render() {
@@ -94,11 +92,13 @@ function resetMap(address) {
       self.map.setCenter(location);
       _.each(self.terms, function(term) {
         _yelpdata.call(self, term);
-      }); 
+      });
     })
     .fail(function(status){
       alert("This address cannot be retrieved from the server");
     });
+
+  this.centerMap(this, this.map, this.markers);
 };
 
 function addmarker(model) {
@@ -106,13 +106,13 @@ function addmarker(model) {
     marker;
 
   if (!this.markers.length == 0 && !this.collection.models[1]) {
-   _removeMarkers(null, this.markers);
-   this.markers = [];
+   _removeMarkers.call(this);
+   _removeInfowindows.call(this);
   };
 
   _geocode.call(this, model.get('address'))
     .done(function(location) {
-      marker = new google.maps.Marker({ 
+      marker = new google.maps.Marker({
         map: self.map,
         position: location
       });
@@ -124,19 +124,56 @@ function addmarker(model) {
     });
 };
 
-function _removeMarkers(map, markers) {
-  for (var i = 0; i < markers.length; i++) {
-    markers[i].setMap(map);
+function centerMap(map, markers){
+  var bounds = new google.maps.LatLngBounds();
+
+  for(i=0;i<markers.length;i++) {
+    bounds.extend(markers[i].getPosition());
   };
+
+  this.map.fitBounds(bounds);
+};
+
+function infoclicker(e) {
+  var self = this,
+    id = e.target.id,
+    infowindow,
+    marker;
+
+    e.preventDefault();
+
+    if (id == 'food' || id == 'resturantIcon') {
+      marker = self.markers[0];
+      infowindow = self.infowindows[0];
+      infowindow.open(this.map, marker);
+    } else if (id == 'drink' || id == 'barIcon') {
+      marker = self.markers[1];
+      infowindow = self.infowindows[1];
+      infowindow.open(this.map, marker);
+    };
 };
 
 function _setMap(zoom, lat, long) {
   var mapOptions = {
-      zoom: zoom ? zoom : 16,
+      zoom: zoom ? zoom : 15,
+      minZoom: 14,
       center: new google.maps.LatLng(lat ? lat : 45.5200,long ? long : -122.6819)
     };
-
   this.map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+};
+
+function _removeMarkers(map, markers) {
+  for (var i = 0; i < this.markers.length; i++) {
+    this.markers[i].setMap(null);
+  };
+  this.markers = [];
+};
+
+function _removeInfowindows(map, infowindows) {
+  for (var i = 0; i < this.infowindows.length; i++) {
+    this.infowindows[i].setMap(null);
+  };
+  this.infowindows = [];
 };
 
 function _geocode(address) {
@@ -174,21 +211,17 @@ function _addModelToCollection(data, term) {
 };
 
 function _infowindow(marker, model) {
+
   var contentString = '<div id="content">'+
-    '<p>'+ model.get('name') +'</p>' + '</div>'
+    '<p>'+ model.get('name') +'</p>' + '</div>';
 
   var infowindow = new google.maps.InfoWindow({
-    content: contentString
+    content: contentString,
+    maxWidth: 700
   });
 
-  // infowindow.close(this.map, marker); 
+  this.infowindows.push(infowindow);
 };
-
-function infoclicker() {
-  console.log("Clicked")
-  // infowindow.open(map, marker);
-};
-
 },{"../../templates/map.hbs":13,"../yelpapi":6}],5:[function(require,module,exports){
 module.exports = Backbone.View.extend({
   el: '#twitter',
@@ -199,31 +232,39 @@ module.exports = Backbone.View.extend({
   initialize: initialize,
   render : render,
   onTweet : onTweet,
-  tweetBuild : tweetBulid,
+  tweetBuild : tweetBuild,
 });
 
 function initialize(app) {
   this.app = app;
-  this.context = {};
-  this.listenTo(this.collection, 'add', tweetBulid);
+  this.context = {
+    businesses0 : {
+      attributes : {
+        tweetstring : 'Date Night'
+      }
+    }
+  };
+
+  this.listenTo(this.collection, 'add', tweetBuild);
   this.render();
 };
 
 function render() {
-  this.$el.html(this.template());
-  // disabled, but shows button on first page view
-  // this.onTweet();
-};
-
-function tweetBulid(model) {
-  this.context.businesses0 = this.collection.models[0];
-  this.context.businesses1 = this.collection.models[1];
   this.$el.html(this.template(this.context));
+  // disabled, but shows button on first page
   this.onTweet();
 };
 
+function tweetBuild(model) {
+  this.context.businesses0 = this.collection.models[0];
+  this.context.businesses1 = this.collection.models[1];
+  this.$el.html(this.template(this.context));
+  // this.onTweet();
+  twttr.widgets.load();
+};
+
 function onTweet() {
-  !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");  
+  !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");
 };
 
 },{"../../templates/twitter.hbs":14}],6:[function(require,module,exports){
@@ -231,21 +272,21 @@ module.exports = {
   getResults : getResults
 };
 
-var auth = { 
+var auth = {
   consumerKey: "sOpnEMjxxOJT9o2-TuczeQ",
   consumerSecret: "URVFfpTxXkfx55Jt74IuvKmGz2k",
   accessToken: "Qx_zcTVcrma7NBQkyUw9n8e3N-uRsyal",
   accessTokenSecret: "EnPUU_HlKUY9FmtSQBc1yFKTJsA",
-  serviceProvider: { 
+  serviceProvider: {
     signatureMethod: "HMAC-SHA1"
   }
 };
 
-function getResults(term, near){ 
+function getResults(term, near){
   var $deferred = new $.Deferred(),
     self = this,
     limit = 1,
-    radius_filter = 200,
+    radius_filter = 1000,
     sort = 2,
     accessor = {
       consumerSecret: auth.consumerSecret,
@@ -761,7 +802,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   
 
 
-  return "<input id=\"address\" type=\"text\" class=\"form-control col-lg-8\" value=\"Portland, OR\">\n<input id=\"searchbtn\" type=\"button\" value=\"Find\" class=\"geocode btn btn-success\">\n    <br>\n    <br>\n    <br>\n<div id=\"map-canvas\"></div>";
+  return "<script type=\"text/javascript\" src=\"js/lib/fancyjq.js\"></script>\n\n<input id=\"address\" type=\"text\" class=\"form-control col-lg-8\" value=\"Portland, OR\">\n<input id=\"searchbtn\" type=\"button\" value=\"Find\" class=\"geocode btn btn-success\">\n    <br>\n    <br>\n    <br>\n<div id=\"map-canvas\"></div>\n\n<div class=\"buttons\">\n    <div class=\"food-container\">\n        <div class=\"food\">\n            <h4>Feed Me</h4>\n            <button class=\"btn btn-success\" id=\"food\">\n                <img src=\"images/buttons/Bread-Icon.jpg\" id=\"restaurantIcon\" alt=\"Restaurant\" title=\"Restaurant\"/>\n            </button>\n            </br>\n        </div>\n    </div>\n\n    <div class=\"drink-container\">\n        <div class=\"drink\">\n            <h4>Beer Me</h4>\n            <button class=\"btn btn-success\" id=\"drink\">\n                <img src=\"images/buttons/Beer-icon.jpg\" id=\"barIcon\" alt=\"Bar\" title=\"Bar\"/>\n            </button>\n            </br>\n        </div>\n    </div>\n</div>";
   });
 },{"/Users/nmcgiver/Code/JavaScript/Datenite/datenight/node_modules/browserify-handlebars/node_modules/handlebars/dist/cjs/handlebars.runtime":7}],14:[function(require,module,exports){
 var templater = require("/Users/nmcgiver/Code/JavaScript/Datenite/datenight/node_modules/browserify-handlebars/node_modules/handlebars/dist/cjs/handlebars.runtime").default.template;module.exports = templater(function (Handlebars,depth0,helpers,partials,data) {
@@ -770,15 +811,11 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
-  buffer += "<script type=\"text/javascript\" src=\"js/lib/fancyjq.js\"></script>\n\n<div class=\"buttons\">\n    <div class=\"food-container\">\n        <div class=\"food\">\n            <h4>Feed Me</h4>\n            <img src=\"images/buttons/Bread-Icon.jpg\" id=\"restaurantIcon\" alt=\"Restaurant\" title=\"Restaurant\"/>\n            </br>\n            <a href=\"https://twitter.com/intent/tweet?button_hashtag=feedme\" class=\"twitter-hashtag-button\" data-size=\"large\" data-text=\""
+  buffer += "<div class=\"twitter\">\n    <div class=\"tweet-food\">\n        <a href=\"https://twitter.com/intent/tweet?button_hashtag=feedme\" class=\"twitter-hashtag-button\" data-size=\"large\" data-text=\""
     + escapeExpression(((stack1 = ((stack1 = ((stack1 = (depth0 && depth0.businesses0)),stack1 == null || stack1 === false ? stack1 : stack1.attributes)),stack1 == null || stack1 === false ? stack1 : stack1.tweetstring)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "\" data-count=\"none\" data-lang=\"en\">Tweet</a>\n            <p>"
-    + escapeExpression(((stack1 = ((stack1 = ((stack1 = (depth0 && depth0.businesses0)),stack1 == null || stack1 === false ? stack1 : stack1.attributes)),stack1 == null || stack1 === false ? stack1 : stack1.tweetstring)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "</p>\n        </div>\n    </div>\n      \n    <div class=\"drink-container\">\n        <div class=\"drink\">\n            <h4>Beer Me</h4>\n            <img src=\"images/buttons/Beer-icon.jpg\" id=\"barIcon\" alt=\"Bar\" title=\"Bar\"/>\n            </br>\n            <a href=\"https://twitter.com/intent/tweet?button_hashtag=beerme\" class=\"twitter-hashtag-button\" data-size=\"large\" data-text=\""
+    + "\" data-count=\"none\" data-lang=\"en\">Tweet</a>\n    </div>\n    <div class=\"tweet-drink\">\n        <a href=\"https://twitter.com/intent/tweet?button_hashtag=beerme\" class=\"twitter-hashtag-button\" data-size=\"large\" data-text=\""
     + escapeExpression(((stack1 = ((stack1 = ((stack1 = (depth0 && depth0.businesses1)),stack1 == null || stack1 === false ? stack1 : stack1.attributes)),stack1 == null || stack1 === false ? stack1 : stack1.tweetstring)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "\" data-count=\"none\" data-lang=\"en\" >Tweet</a>\n            <p>"
-    + escapeExpression(((stack1 = ((stack1 = ((stack1 = (depth0 && depth0.businesses1)),stack1 == null || stack1 === false ? stack1 : stack1.attributes)),stack1 == null || stack1 === false ? stack1 : stack1.tweetstring)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "</p> \n        </div>\n    </div>\n</div>\n";
+    + "\" data-count=\"none\" data-lang=\"en\" >Tweet</a>\n    </div>\n</div>\n";
   return buffer;
   });
 },{"/Users/nmcgiver/Code/JavaScript/Datenite/datenight/node_modules/browserify-handlebars/node_modules/handlebars/dist/cjs/handlebars.runtime":7}]},{},[1])
