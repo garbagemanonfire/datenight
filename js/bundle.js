@@ -198,6 +198,7 @@ function _yelpdata(term) {
       _addModelToCollection.call(self, data, term);
     })
     .fail(function() {
+      console.log('Oh poop')
     });
 };
 
