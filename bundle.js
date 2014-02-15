@@ -813,9 +813,9 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 
 
   buffer += "<div class=\"twitter\">\n    <div class=\"tweet-food\">\n        <a href=\"https://twitter.com/intent/tweet?button_hashtag=feedme\" class=\"twitter-hashtag-button\" data-size=\"large\" data-text=\""
-    + escapeExpression(((stack1 = ((stack1 = ((stack1 = (depth0 && depth0.businesses0)),stack1 == null || stack1 === false ? stack1 : stack1.attributes)),stack1 == null || stack1 === false ? stack1 : stack1.tweetstring)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "\" data-count=\"none\" data-lang=\"en\">Tweet</a>\n    </div>\n    <div class=\"tweet-drink\">\n        <a href=\"https://twitter.com/intent/tweet?button_hashtag=beerme\" class=\"twitter-hashtag-button\" data-size=\"large\" data-text=\""
     + escapeExpression(((stack1 = ((stack1 = ((stack1 = (depth0 && depth0.businesses1)),stack1 == null || stack1 === false ? stack1 : stack1.attributes)),stack1 == null || stack1 === false ? stack1 : stack1.tweetstring)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "\" data-count=\"none\" data-lang=\"en\">Tweet</a>\n    </div>\n    <div class=\"tweet-drink\">\n        <a href=\"https://twitter.com/intent/tweet?button_hashtag=beerme\" class=\"twitter-hashtag-button\" data-size=\"large\" data-text=\""
+    + escapeExpression(((stack1 = ((stack1 = ((stack1 = (depth0 && depth0.businesses0)),stack1 == null || stack1 === false ? stack1 : stack1.attributes)),stack1 == null || stack1 === false ? stack1 : stack1.tweetstring)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\" data-count=\"none\" data-lang=\"en\" >Tweet</a>\n    </div>\n</div>\n";
   return buffer;
   });
