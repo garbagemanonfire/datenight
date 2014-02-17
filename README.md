@@ -1,26 +1,29 @@
-DateNight
+##Datenite
 
-* Backbone app with:
-** Node, 
-** Bootstrap, 
-** Yelp API, 
-** Google maps api, 
-** and twitter apI.
+This app is for people who are on a date, or at an event, and need to find an establishment.  They don’t want to have to mess around with filters for ratings or location.  
+
+* [Backbone] structure (https://backbonejs.org)
+* [Node](https://nodejs.org) 
+* [Bootstrap] (https://getbootstrap.com)
+* [Yelp API] (http://www.yelp.com/developers/documentation)
+* [Google Maps API] (https://developers.google.com/maps/) 
+* [Twitter API] (https://dev.twitter.com/)
 
 Ver .01 
--static site sketches
+-Static site sketches
 
 Ver .02 
 -Backbone
 -Bootswatch
--Attempted to connect Yelp Api but to no avail.
+-Attempted to connect Yelp API but to no avail.
 -Reformatted the look and feel
 
-Ver. 03
--Connected google maps goecode api.
+Ver .03
+-Connected google maps geocode API.
+
+Ver .04
+-Connected Twitter API, buttons are now fully functional.  
 
 
-Steps to MVP left
-Twitter button
-Marker Removal 
-Infobox on click
+
+
