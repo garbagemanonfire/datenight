@@ -2,7 +2,7 @@
 
 This app is for people who are on a date, or at an event, and need to find an establishment.  They don’t want to have to mess around with filters for ratings or location.  
 
-* [Backbone](https://backbonejs.org)structure 
+* [Backbone](https://backbonejs.org) structure 
 * [Node](https://nodejs.org) 
 * [Bootstrap](https://getbootstrap.com)
 * [Yelp API](http://www.yelp.com/developers/documentation)
