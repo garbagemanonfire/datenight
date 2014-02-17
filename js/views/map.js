@@ -98,12 +98,12 @@ function infoclicker(e) {
     e.preventDefault();
 
     if (id == 'food' || id == 'resturantIcon') {
-      marker = self.markers[0];
-      infowindow = self.infowindows[0];
-      infowindow.open(this.map, marker);
-    } else if (id == 'drink' || id == 'barIcon') {
       marker = self.markers[1];
       infowindow = self.infowindows[1];
+      infowindow.open(this.map, marker);
+    } else if (id == 'drink' || id == 'barIcon') {
+      marker = self.markers[0];
+      infowindow = self.infowindows[0];
       infowindow.open(this.map, marker);
     };
 };
