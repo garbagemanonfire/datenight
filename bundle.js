@@ -1,5 +1,5 @@
 ;(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-$(function () { 
+$(function () {
 
 var MapView = require('./views/map'),
     TwitterView = require('./views/twitter'),
@@ -28,7 +28,7 @@ window.app = app;
 var DateNiteModel = require('../models/datenite');
 
 var Businesses = Backbone.Collection.extend({
-    
+
     model: DateNiteModel
 
 });
@@ -800,7 +800,7 @@ exports.isEmpty = isEmpty;
 var templater = require("/Users/nmcgiver/Code/JavaScript/Datenite/datenight/node_modules/browserify-handlebars/node_modules/handlebars/dist/cjs/handlebars.runtime").default.template;module.exports = templater(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  
+
 
 
   return "<script type=\"text/javascript\" src=\"js/lib/fancyjq.js\"></script>\n\n<input id=\"address\" type=\"text\" class=\"form-control col-lg-8\" value=\"Portland, OR\">\n<input id=\"searchbtn\" type=\"button\" value=\"Find\" class=\"geocode btn btn-success\">\n    <br>\n    <br>\n    <br>\n<div id=\"map-canvas\"></div>\n\n<div class=\"buttons\">\n    <div class=\"food-container\">\n        <div class=\"food\">\n            <h4>Feed Me</h4>\n            <button class=\"btn btn-success\" id=\"food\">\n                <img src=\"images/buttons/Bread-Icon.jpg\" id=\"restaurantIcon\" alt=\"Restaurant\" title=\"Restaurant\"/>\n            </button>\n            </br>\n        </div>\n    </div>\n\n    <div class=\"drink-container\">\n        <div class=\"drink\">\n            <h4>Beer Me</h4>\n            <button class=\"btn btn-success\" id=\"drink\">\n                <img src=\"images/buttons/Beer-icon.jpg\" id=\"barIcon\" alt=\"Bar\" title=\"Bar\"/>\n            </button>\n            </br>\n        </div>\n    </div>\n</div>";
