@@ -13,7 +13,7 @@ We used the following technologies:
 * [Twitter API](https://dev.twitter.com/)
 
 Ver .01 
-* Static site sketches
+* Site sketch
 * Backbone
 * Bootswatch
 * Connect Yelp API
