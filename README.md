@@ -6,7 +6,7 @@ We used the following technologies:
 
 * [Backbone.js](https://backbonejs.org) 
 * [Browserify NPM package](http://browserify.org/)
-* [Bootstrap](https://getbootstrap.com)
+* [Bootswatch a flavor of Bootstrap](http://bootswatch.com/)
 * [Yelp API](http://www.yelp.com/developers/documentation)
 * [Google Geocoder] (https://developers.google.com/maps/documentation/geocoding/)
 * [Google Maps API](https://developers.google.com/maps/) 
