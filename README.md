@@ -13,19 +13,20 @@ We used the following technologies:
 * [Twitter API](https://dev.twitter.com/)
 
 Ver .01 
--Static site sketches
+* Static site sketches
+* Backbone
+* Bootswatch
+* Connect Yelp API
+* Reformatted the look and feel
 
 Ver .02 
--Backbone
--Bootswatch
--Connect Yelp API
--Reformatted the look and feel
+* Connected Google maps Geocode API to drop markers.
 
 Ver .03
--Connected Google maps Geocode API to drop markers.
+* Refactored code to use jquery deffered and to use backbone collections
 
 Ver .04
--Connected Twitter API, buttons are now fully functional.  
+* Connected Twitter API, buttons are now fully functional.  
 
 
 
