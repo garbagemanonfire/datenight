@@ -173,7 +173,7 @@ function _infowindow(marker, model) {
 
   var infowindow = new google.maps.InfoWindow({
     content: contentString,
-    maxWidth: 700
+    maxWidth: 900
   });
 
   this.infowindows.push(infowindow);
