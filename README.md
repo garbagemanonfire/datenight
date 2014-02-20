@@ -13,14 +13,11 @@ We used the following technologies:
 * [Twitter API](https://dev.twitter.com/)
 
 Ver .01 
-* Site sketch
-* Backbone
-* Bootswatch
-* Connect Yelp API
-* Reformatted the look and feel
+* Site sketch w/ Backbone and Bootswatch
+* Tested Google Maps and Yelp API
 
 Ver .02 
-* Connected Google maps Geocode API to drop markers.
+* Connected Google maps and Geocode API to drop markers from Yelp Api.
 
 Ver .03
 * Refactored code to use jquery deffered and to use backbone collections
