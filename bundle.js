@@ -213,8 +213,7 @@ function _addModelToCollection(data, term) {
 
 function _infowindow(marker, model) {
 
-  var contentString = '<div id="content">'+
-    '<p>'+ model.get('name') +'</p>' + '</div>';
+  var contentString = '<div id="content">'+ '<p>'+ model.get('name') +'</p>' + '</div>';
 
   var infowindow = new google.maps.InfoWindow({
     content: contentString,
