@@ -217,7 +217,6 @@ function _infowindow(marker, model) {
 
   var infowindow = new google.maps.InfoWindow({
     content: contentString,
-    maxWidth: 1000
   });
 
   this.infowindows.push(infowindow);
