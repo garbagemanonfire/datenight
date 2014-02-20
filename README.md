@@ -2,10 +2,10 @@
 
 This app is for people who are on a date, or at an event, and need to find an establishment.  They don’t want to have to mess around with search, filters for ratings, or location. They just want to find the best bar or resturant within walking distance.
 
-We used the following technologies:
+DateNite Utilizes the following:
 
 * [Backbone.js](https://backbonejs.org) 
-* [Browserify NPM package](http://browserify.org/)
+* [Browserify](http://browserify.org/)
 * [Bootswatch a flavor of Bootstrap](http://bootswatch.com/)
 * [Yelp API](http://www.yelp.com/developers/documentation)
 * [Google Geocoder] (https://developers.google.com/maps/documentation/geocoding/)
